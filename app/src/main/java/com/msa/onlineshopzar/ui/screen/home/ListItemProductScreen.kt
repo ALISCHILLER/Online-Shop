@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
