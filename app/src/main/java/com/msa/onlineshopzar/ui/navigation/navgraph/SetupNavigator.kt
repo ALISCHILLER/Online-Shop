@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.ui.screen.home.HomeScreen
+import com.msa.onlineshopzar.ui.screen.login.LoginScreen
 import com.msa.onlineshopzar.ui.screen.splash.SplashScreen
 
 @ExperimentalMaterial3Api
@@ -38,6 +39,10 @@ fun DeiceNavigator(
             startDestination = Route.HomeScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
+            composable(route = Route.LoginScreen.route) {
+                LoginScreen()
+            }
+
             composable(route = Route.SplashScreen.route) {
                 SplashScreen()
             }
@@ -53,5 +58,5 @@ fun DeiceNavigator(
 
 // تابع برای تعیین اینکه آیا bottomBar باید نمایش داده شود یا خیر
 fun shouldShowBottomBar(currentRoute: String?): Boolean {
-    return currentRoute != Route.SplashScreen.route
+    return currentRoute != Route.SplashScreen.route && currentRoute != Route.LoginScreen.route
 }
