@@ -5,14 +5,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,8 +45,13 @@ import com.msa.onlineshopzar.ui.navigation.bottomNav.anim.ShapeCornerRadius
 import com.msa.onlineshopzar.ui.navigation.bottomNav.anim.shapeCornerRadius
 import com.msa.onlineshopzar.ui.navigation.bottomNav.layout.animatedNavBarMeasurePolicy
 import com.msa.onlineshopzar.ui.navigation.bottomNav.util.ballTransform
-import com.msa.onlineshopzar.ui.theme.barcolor
+import com.msa.onlineshopzar.ui.navigation.bottomNav.util.noRippleClickable
 
+
+
+data class NavigationBarItems(
+    val icon: ImageVector, val title: String
+)
 @Composable
 fun AnimatedNavigationBar(
     modifier: Modifier = Modifier,
@@ -94,7 +105,7 @@ fun AnimatedNavigationBar(
                 ballAnimInfo = ballAnimInfoState.value,
                 ballColor = ballColor,
                 sizeDp = ballSize,
-                nav = navigationBarItems.get(selectedIndex)
+                nav = navigationBarItems[selectedIndex]
             )
         }
     }
@@ -129,24 +140,10 @@ private fun ColorBall(
 
 
 val ballSize = 70.dp
-
-//enum class NavigationBarItems(val icon: ImageVector, val title: String) {
-//    Setting(icon = ImageVector.vectorResource(R.drawable.iconproduct), title = ""),
-//    Report(icon = Icons.Default.Analytics),
-//    g(icon = Icons.Default.Home),
-//    h(icon = Icons.Default.AcUnit),
-//    u(icon = Icons.Default.AddAlert),
-//
-//}
-
-data class NavigationBarItems(
-    val icon: ImageVector, val title: String
-)
-@Preview
 @Composable
-private fun AnimatedNavigationBarPreview() {
+fun BottomNavaghtion() {
     var selectedIndex by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     val navigationBarItemsList = listOf(
         NavigationBarItems(icon = ImageVector.vectorResource(R.drawable.iconproduct), title = "Product"),
@@ -157,16 +154,65 @@ private fun AnimatedNavigationBarPreview() {
     )
     AnimatedNavigationBar(
         modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 40.dp)
+            .padding(horizontal = 0.dp, vertical = 0.dp)
             .height(85.dp),
         selectedIndex = selectedIndex,
         cornerRadius = shapeCornerRadius(cornerRadius = 0.dp),
         ballAnimation = Parabolic(tween(300)),
         indentAnimation = Height(tween(300)),
-        barColor = barcolor,
+        barColor = Color.White,
         ballColor = Color.Red,
         navigationBarItems = navigationBarItemsList
     ) {
+        navigationBarItemsList.forEachIndexed { index, it ->
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .noRippleClickable {
+                        selectedIndex = index
+                        when (index) {
+
+                            else -> {}
+                        }
+
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    imageVector = it.icon,
+                    contentDescription = "Bottom Bar",
+                    tint = Color.Black
+                )
+            }
+        }
     }
 }
+
+
+@Preview
+@Composable
+private fun AnimatedNavigationBarPreview() {
+
+    val navigationBarItemsList = listOf(
+        NavigationBarItems(icon = ImageVector.vectorResource(R.drawable.iconproduct), title = "Product"),
+        NavigationBarItems(icon = ImageVector.vectorResource(R.drawable.report), title = "Report"),
+        NavigationBarItems(icon =ImageVector.vectorResource(R.drawable.basket), title = "Basket"),
+        NavigationBarItems(icon =ImageVector.vectorResource(R.drawable.profile), title = "Profile"),
+        // ادامه دادن برای سایر آیتم‌ها
+    )
+    Scaffold(
+        bottomBar = {
+
+           BottomNavaghtion()
+
+        }
+    ) {
+        val bottomPadding = it.calculateBottomPadding()
+    }
+
+}
+
+
 

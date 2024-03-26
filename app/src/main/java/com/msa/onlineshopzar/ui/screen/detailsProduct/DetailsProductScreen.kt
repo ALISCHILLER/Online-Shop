@@ -47,7 +47,7 @@ fun DetailsProductScreen() {
         modifier = Modifier
             .background(color = PlatinumSilver),
         topBar = {
-            TopBarDetails()
+            TopBarDetails("جزِئیات محصول")
         }
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {

@@ -25,7 +25,9 @@ import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 
 @Composable
-fun TopBarDetails() {
+fun TopBarDetails(
+    name:String
+) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
             modifier = Modifier
@@ -54,5 +56,7 @@ fun TopBarDetails() {
 @Preview
 @Composable
 private fun TopBarDetailsPreview() {
-    TopBarDetails()
+    TopBarDetails(
+        "جزِئیات محصول"
+    )
 }

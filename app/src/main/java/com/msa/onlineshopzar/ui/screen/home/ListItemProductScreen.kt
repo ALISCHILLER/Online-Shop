@@ -130,6 +130,24 @@ fun ListItemProductScreen() {
                                 )
                             }
                         }
+
+
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 3.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "مبلغ ناخالص:",
+                                fontSize = 10.sp
+                            )
+                            Text(
+                                text = "523,520,054",
+                                fontSize = 10.sp
+                            )
+                        }
                     }
 
 
