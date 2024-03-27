@@ -91,7 +91,7 @@ fun LoginScreen() {
                     RoundedIconTextField(
                         value = username,
                         onValueChange = { username = it },
-                        label = "نام کاربری",
+                        label = "کد ملی",
                         icon = Icons.Default.Person,
                         modifier = Modifier.padding(6.dp)
                     )

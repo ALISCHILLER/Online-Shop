@@ -1,5 +1,13 @@
 package com.msa.onlineshopzar.ui.screen.basket
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -35,6 +43,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.toRect
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
 
 
 @Composable
@@ -49,33 +70,127 @@ fun ShoppingCardItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .size(100.dp, 75.dp)
+            .drawWithCache {
+                onDrawWithContent {
+                    // draw behind the content the vertical line on the left
+                    drawLine(
+                        color = Color.Red,
+                        start = Offset.Zero,
+                        end = Offset(0f, this.size.height),
+                        strokeWidth= 10f
+                    )
+
+                    // draw the content
+                    drawContent()
+                }
+            }
+        ,
 
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Text(text = itemName, style = MaterialTheme.typography.bodySmall)
-            Text(text = itemDesc, style = MaterialTheme.typography.bodyLarge)
 
-            Spacer(modifier = Modifier.height(8.dp))
+    }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onDelete) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .size(100.dp, 75.dp)
+            .drawWithCache {
+                onDrawWithContent {
+                    // draw behind the content the vertical line on the left
+                    drawLine(
+                        color = Color.Red,
+                        start = Offset.Zero,
+                        end = Offset(0f, this.size.height),
+                        strokeWidth= 10f
+                    )
+
+                    // draw the content
+                    drawContent()
                 }
-                Text(text = "$itemCount")
-                IconButton(onClick = onDecrease) {
-                    Icon(imageVector = Icons.Default.Remove, contentDescription = "Decrease")
-                }
-                IconButton(onClick = onIncrease) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Increase")
-                }
+            }
+            .background(Color.Blue, shape = RoundedCornerShape(12.dp))
+    ) {
+
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .size(100.dp, 75.dp)
+    ) {
+        Box(Modifier.fillMaxSize()) {
+            Column {
+                //your content
+            }
+            Canvas(Modifier.fillMaxSize()) {
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+                drawLine( //top line
+                    start = Offset(x = 0f, y = 0f),
+                    end = Offset(x = canvasWidth, y = 0f),
+                    strokeWidth = 3f,
+                    color = Color.Blue
+                )
+                drawLine( //bottom line
+                    start = Offset(x = 0f, y = canvasHeight),
+                    end = Offset(x = canvasWidth, y = canvasHeight),
+                    strokeWidth = 3f,
+                    color = Color.Green
+                )
+                drawLine( //left line
+                    start = Offset(x = 0f, y = 0f),
+                    end = Offset(x = 0f, y = canvasHeight),
+                    strokeWidth = 3f,
+                    color = Color.Magenta
+                )
+                drawLine( //right line
+                    start = Offset(x = canvasWidth, y = 0f),
+                    end = Offset(x = canvasWidth, y = canvasHeight),
+                    strokeWidth = 10f,
+                    color = Color.Red
+                )
             }
         }
     }
+
+    val colorBg = Color(0xFF2C3141)
+    val colors =
+        listOf(
+            Color(0xFFFF595A),
+            Color(0xFFFFC766),
+            Color(0xFF35A07F),
+            Color(0xFF35A07F),
+            Color(0xFFFFC766),
+            Color(0xFFFF595A)
+        )
+
+    val brush = Brush.linearGradient(colors)
+
+    Canvas(modifier = Modifier.fillMaxWidth().height(200.dp).background(colorBg)) {
+        drawRoundRect(
+            brush = brush,
+            cornerRadius = CornerRadius(x = 20.dp.toPx(), y = 20.dp.toPx()
+            )
+        )
+
+        drawRoundRect(
+            color = colorBg,
+            topLeft = Offset(1.dp.toPx(), 1.dp.toPx()),
+            size = Size(
+                width = size.width - 2.dp.toPx(),
+                height = size.height - 2.dp.toPx()
+            ),
+            cornerRadius = CornerRadius(
+                x = 19.dp.toPx(),
+                y = 19.dp.toPx()
+            )
+        )
+    }
+
 }
 
 @Composable
