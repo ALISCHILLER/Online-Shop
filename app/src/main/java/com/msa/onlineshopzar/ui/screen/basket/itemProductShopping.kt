@@ -56,139 +56,209 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.sp
+import com.msa.onlineshopzar.R
+import com.msa.onlineshopzar.ui.component.CounterButton
+import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
-
+//itemName: String,
+//itemDesc: String,
+//itemCount: Int,
+//onIncrease: () -> Unit,
+//onDecrease: () -> Unit,
+//onDelete: () -> Unit
 @Composable
 fun ShoppingCardItem(
-    itemName: String,
-    itemDesc: String,
-    itemCount: Int,
-    onIncrease: () -> Unit,
-    onDecrease: () -> Unit,
-    onDelete: () -> Unit
+
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .size(100.dp, 75.dp)
-            .drawWithCache {
-                onDrawWithContent {
-                    // draw behind the content the vertical line on the left
-                    drawLine(
-                        color = Color.Red,
-                        start = Offset.Zero,
-                        end = Offset(0f, this.size.height),
-                        strokeWidth= 10f
-                    )
 
-                    // draw the content
-                    drawContent()
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .size(100.dp, 200.dp)
+                .background(color = Color.White)
+        ) {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.White)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                        .background(color = Color.White),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                )
+                {
+                    Column(
+                        modifier = Modifier
+                            .aspectRatio(0.5f),
+                        verticalArrangement = Arrangement.SpaceAround
+                    ){
+                        Box(
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .size(100.dp, 75.dp)
+                                .background(
+                                    color = PlatinumSilver,
+                                    shape = RoundedCornerShape(18.dp)
+                                )
+                                .aspectRatio(1f)
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.product),
+                                contentDescription = "product",
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "قیمت هر عدد:"
+                        )
+
+                        Text(
+                            modifier = Modifier
+                                .padding(5.dp),
+                            text = "562,363"
+                        )
+
+                    }
+                    var valueCounter by remember { mutableStateOf(0) }
+                    Column(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .aspectRatio(1.3f),
+                        verticalArrangement = Arrangement.SpaceAround
+                    ){
+                        Text(text = "پاستا فتوچینی آشیانه ای زر ماکارون")
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(vertical = 3.dp)
+                                    .fillMaxWidth()
+                                ,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                Text(
+                                    text = "بسته:(1عدد)",
+                                    fontSize = 10.sp
+                                )
+                                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                    CounterButton(
+                                        value = valueCounter.toString(),
+                                        onValueIncreaseClick = {
+                                            valueCounter += 1
+                                        },
+                                        onValueDecreaseClick = {
+                                            valueCounter = maxOf(valueCounter - 1, 0)
+                                        },
+                                        onValueClearClick = {
+                                            valueCounter = 0
+                                        }
+                                    )
+                                }
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(vertical = 3.dp)
+                                    .fillMaxWidth()
+                                ,
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ) {
+                                Text(
+                                    text = "کارتن:(32عدد)",
+                                    fontSize = 10.sp
+                                )
+                                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                    CounterButton(
+                                        value = valueCounter.toString(),
+                                        onValueIncreaseClick = {
+                                            valueCounter += 1
+                                        },
+                                        onValueDecreaseClick = {
+                                            valueCounter = maxOf(valueCounter - 1, 0)
+                                        },
+                                        onValueClearClick = {
+                                            valueCounter = 0
+                                        }
+                                    )
+                                }
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(vertical = 3.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "مبلغ ناخالص:",
+                                    fontSize = 10.sp
+                                )
+                                Text(
+                                    text = "523,520,054",
+                                    fontSize = 10.sp
+                                )
+                            }
+
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .aspectRatio(0.5f)
+                    ) {
+                            Image(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .size(30.dp, 30.dp),
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "product",
+                            )
+
+                    }
+
                 }
-            }
-        ,
-
-    ) {
-
-    }
-
-    Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .size(100.dp, 75.dp)
-            .drawWithCache {
-                onDrawWithContent {
-                    // draw behind the content the vertical line on the left
-                    drawLine(
-                        color = Color.Red,
-                        start = Offset.Zero,
-                        end = Offset(0f, this.size.height),
-                        strokeWidth= 10f
+                Canvas(Modifier.fillMaxSize()) {
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
+//                drawLine( //top line
+//                    start = Offset(x = 0f, y = 0f),
+//                    end = Offset(x = canvasWidth, y = 0f),
+//                    strokeWidth = 3f,
+//                    color = Color.Blue
+//                )
+//                drawLine( //bottom line
+//                    start = Offset(x = 0f, y = canvasHeight),
+//                    end = Offset(x = canvasWidth, y = canvasHeight),
+//                    strokeWidth = 3f,
+//                    color = Color.Green
+//                )
+//                drawLine( //left line
+//                    start = Offset(x = 0f, y = 0f),
+//                    end = Offset(x = 0f, y = canvasHeight),
+//                    strokeWidth = 3f,
+//                    color = Color.Magenta
+//                )
+                    drawLine( //right line
+                        start = Offset(x = canvasWidth, y = 0f),
+                        end = Offset(x = canvasWidth, y = canvasHeight),
+                        strokeWidth = 10f,
+                        color = Color.Red
                     )
-
-                    // draw the content
-                    drawContent()
                 }
-            }
-            .background(Color.Blue, shape = RoundedCornerShape(12.dp))
-    ) {
-
-    }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .size(100.dp, 75.dp)
-    ) {
-        Box(Modifier.fillMaxSize()) {
-            Column {
-                //your content
-            }
-            Canvas(Modifier.fillMaxSize()) {
-                val canvasWidth = size.width
-                val canvasHeight = size.height
-                drawLine( //top line
-                    start = Offset(x = 0f, y = 0f),
-                    end = Offset(x = canvasWidth, y = 0f),
-                    strokeWidth = 3f,
-                    color = Color.Blue
-                )
-                drawLine( //bottom line
-                    start = Offset(x = 0f, y = canvasHeight),
-                    end = Offset(x = canvasWidth, y = canvasHeight),
-                    strokeWidth = 3f,
-                    color = Color.Green
-                )
-                drawLine( //left line
-                    start = Offset(x = 0f, y = 0f),
-                    end = Offset(x = 0f, y = canvasHeight),
-                    strokeWidth = 3f,
-                    color = Color.Magenta
-                )
-                drawLine( //right line
-                    start = Offset(x = canvasWidth, y = 0f),
-                    end = Offset(x = canvasWidth, y = canvasHeight),
-                    strokeWidth = 10f,
-                    color = Color.Red
-                )
             }
         }
-    }
-
-    val colorBg = Color(0xFF2C3141)
-    val colors =
-        listOf(
-            Color(0xFFFF595A),
-            Color(0xFFFFC766),
-            Color(0xFF35A07F),
-            Color(0xFF35A07F),
-            Color(0xFFFFC766),
-            Color(0xFFFF595A)
-        )
-
-    val brush = Brush.linearGradient(colors)
-
-    Canvas(modifier = Modifier.fillMaxWidth().height(200.dp).background(colorBg)) {
-        drawRoundRect(
-            brush = brush,
-            cornerRadius = CornerRadius(x = 20.dp.toPx(), y = 20.dp.toPx()
-            )
-        )
-
-        drawRoundRect(
-            color = colorBg,
-            topLeft = Offset(1.dp.toPx(), 1.dp.toPx()),
-            size = Size(
-                width = size.width - 2.dp.toPx(),
-                height = size.height - 2.dp.toPx()
-            ),
-            cornerRadius = CornerRadius(
-                x = 19.dp.toPx(),
-                y = 19.dp.toPx()
-            )
-        )
     }
 
 }
@@ -197,14 +267,7 @@ fun ShoppingCardItem(
 fun ShoppingCart(items: List<ShoppingItem>) {
     Column {
         items.forEach { item ->
-            ShoppingCardItem(
-                itemName = item.name,
-                itemDesc = item.desc,
-                itemCount = item.count,
-                onIncrease = { /* TODO: Handle increase action */ },
-                onDecrease = { /* TODO: Handle decrease action */ },
-                onDelete = { /* TODO: Handle delete action */ }
-            )
+            ShoppingCardItem()
         }
 
         Button(
@@ -236,7 +299,6 @@ data class ShoppingItem(val name: String, val desc: String, var count: Int)
 
 
 // Remember to call `ShoppingCartItem()` inside your Scaffold or Composable view hierarchy.
-
 
 
 //@Preview(showBackground = true)
