@@ -94,7 +94,7 @@ fun ShopppingList() {
                         imageVector = Icons.Default.ArrowForwardIos,
                         contentDescription = "iconbutton"
                     )
-                    Text("ثبت سفارش")
+                    Text("ثبت پیش فاکتور")
                 }
 
             }

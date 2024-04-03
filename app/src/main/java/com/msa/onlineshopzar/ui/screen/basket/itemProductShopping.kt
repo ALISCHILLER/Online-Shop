@@ -37,6 +37,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -80,8 +81,10 @@ fun ShoppingCardItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .size(100.dp, 200.dp)
-                .background(color = Color.White)
+                .size(100.dp, 200.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            )
         ) {
             Box(
                 Modifier

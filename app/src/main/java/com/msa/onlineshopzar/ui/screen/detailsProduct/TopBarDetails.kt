@@ -26,7 +26,8 @@ import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
 fun TopBarDetails(
-    name:String
+    name:String,
+    details:String=""
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Row(
@@ -37,7 +38,15 @@ fun TopBarDetails(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "جزِئیات محصول")
+
+            Row {
+                Text(text = name)
+                if (details.isNotEmpty())
+                    Text(
+                        text = details,
+                        color = Color.Red
+                    )
+            }
             Box(
                 modifier = Modifier
                     .size(26.dp)

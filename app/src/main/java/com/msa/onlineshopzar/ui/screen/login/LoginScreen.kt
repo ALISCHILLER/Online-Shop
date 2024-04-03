@@ -71,7 +71,8 @@ fun LoginScreen() {
                         .height(490.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color.White),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceAround
                 ) {
 
                     Image(
