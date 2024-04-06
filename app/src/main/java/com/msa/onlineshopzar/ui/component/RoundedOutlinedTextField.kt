@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -39,7 +40,8 @@ fun RoundedIconTextField(
     label: String,
     icon: ImageVector,
     isPassword: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    typeEnabled:Boolean=true
 ) {
     var passwordVisibility by remember { mutableStateOf(!isPassword) }
 
@@ -69,7 +71,9 @@ fun RoundedIconTextField(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(onDone = { /* Handle Done action */ }),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(26.dp),
+            readOnly  = typeEnabled
         )
     }
 }
