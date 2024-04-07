@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
@@ -13,27 +12,35 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.ui.component.RoundedIconTextField
+import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
             painter = painterResource(id = R.drawable.backgroundlogin),
             contentDescription = "backgroundlogin",
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillBounds
         )
 
         Column(
@@ -66,9 +73,9 @@ fun LoginScreen() {
                     )
 
                     Text(
+                        modifier = Modifier.fillMaxWidth(),
                         text = "وارد شوید!",
-
-                    )
+                        )
 
                     RoundedIconTextField(
                         value = username,
@@ -92,6 +99,7 @@ fun LoginScreen() {
 
                     Button(
                         onClick = {
+                            navController.navigate(Route.HomeScreen.route)
                             // اینجا می‌توانید عملیات ورود را انجام دهید
                             // مثلا می‌توانید اطلاعات را به سرور ارسال کرده و ورود کاربر را بررسی کنید
                         },
@@ -114,5 +122,6 @@ fun LoginScreen() {
 @Preview
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen()
+    val navController = rememberNavController()
+    LoginScreen(navController)
 }

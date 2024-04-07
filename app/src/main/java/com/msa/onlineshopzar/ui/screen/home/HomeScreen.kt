@@ -65,7 +65,9 @@ fun HomeScreen() {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .weight(1.0f)
+                    ,
                 ) {
                     items(productGroups){
                         ListItemProductScreen()

@@ -90,6 +90,8 @@ fun HomeTopBar() {
                         .semantics { isTraversalGroup = true }) {
                     SearchBar(
                         modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxWidth()
                             .align(Alignment.TopCenter)
                             .semantics { traversalIndex = -1f },
                         query = text,

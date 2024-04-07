@@ -46,7 +46,7 @@ import com.msa.onlineshopzar.ui.navigation.bottomNav.anim.shapeCornerRadius
 import com.msa.onlineshopzar.ui.navigation.bottomNav.layout.animatedNavBarMeasurePolicy
 import com.msa.onlineshopzar.ui.navigation.bottomNav.util.ballTransform
 import com.msa.onlineshopzar.ui.navigation.bottomNav.util.noRippleClickable
-
+import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 
 
 data class NavigationBarItems(
@@ -141,7 +141,9 @@ private fun ColorBall(
 
 val ballSize = 70.dp
 @Composable
-fun BottomNavaghtion() {
+fun BottomNavaghtion(
+    onClick: (String) -> Unit
+) {
     var selectedIndex by remember {
         mutableIntStateOf(0)
     }
@@ -172,7 +174,19 @@ fun BottomNavaghtion() {
                     .noRippleClickable {
                         selectedIndex = index
                         when (index) {
+                            0 -> onClick(
+                                Route.HomeScreen.route
+                            )
 
+                            1-> onClick(
+                                    Route.HomeScreen.route
+                                )
+                            2 ->onClick(
+                                Route.ShoppingListScreen.route
+                            )
+                            3->onClick(
+                                Route.ProfileCustomerScreen.route
+                            )
                             else -> {}
                         }
 
@@ -205,7 +219,9 @@ private fun AnimatedNavigationBarPreview() {
     Scaffold(
         bottomBar = {
 
-           BottomNavaghtion()
+           BottomNavaghtion(
+               {}
+           )
 
         }
     ) {

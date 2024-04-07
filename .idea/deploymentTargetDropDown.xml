@@ -8,13 +8,26 @@
       <entry key="DetailsProductScreenPreview">
         <State />
       </entry>
-      <entry key="OrderAddressRegistrationScreenPreview">
-        <State />
-      </entry>
       <entry key="ProfileCustomerScreenPreview">
         <State />
       </entry>
       <entry key="ProfileRestPasswordScreenPreview">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\zar\.android\avd\Pixel_7_Pro_API_29.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-07T11:01:31.492239200Z" />
+        </State>
+      </entry>
+      <entry key="ShopppingListPreview">
         <State />
       </entry>
       <entry key="app">

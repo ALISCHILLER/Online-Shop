@@ -41,6 +41,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -64,6 +65,7 @@ import androidx.compose.ui.unit.sp
 import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
+import com.msa.onlineshopzar.ui.theme.lightcoral
 
 //itemName: String,
 //itemDesc: String,
@@ -101,7 +103,7 @@ fun ShoppingCardItem(
                 {
                     Column(
                         modifier = Modifier
-                            .aspectRatio(0.5f),
+                            .aspectRatio(0.6f),
                         verticalArrangement = Arrangement.SpaceAround
                     ){
                         Box(
@@ -123,13 +125,16 @@ fun ShoppingCardItem(
 
                         Text(
                             modifier = Modifier
-                                .padding(8.dp),
+                                .padding(8.dp)
+                                .fillMaxWidth()
+                            ,
                             text = "قیمت هر عدد:"
                         )
 
                         Text(
                             modifier = Modifier
-                                .padding(5.dp),
+                                .padding(5.dp)
+                                .fillMaxWidth(),
                             text = "562,363"
                         )
 
@@ -138,7 +143,7 @@ fun ShoppingCardItem(
                     Column(
                         modifier = Modifier
                             .padding(5.dp)
-                            .aspectRatio(1.3f),
+                            .aspectRatio(1.1f),
                         verticalArrangement = Arrangement.SpaceAround
                     ){
                         Text(text = "پاستا فتوچینی آشیانه ای زر ماکارون")
@@ -199,27 +204,32 @@ fun ShoppingCardItem(
                                 }
                             }
 
-                            Row(
-                                modifier = Modifier
-                                    .padding(vertical = 3.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = "مبلغ ناخالص:",
-                                    fontSize = 10.sp
-                                )
-                                Text(
-                                    text = "523,520,054",
-                                    fontSize = 10.sp
-                                )
-                            }
+
+                        OutlinedButton(
+                            onClick = { },
+                            border = BorderStroke(1.dp, Color.Red),
+                            shape = RoundedCornerShape(50), // = 50% percent
+                            // or shape = CircleShape
+                            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Red)
+                        ) {
+                            Text(
+                                text = "مبلغ ناخالص:",
+                                fontSize = 10.sp,
+                                color= Color.White
+                            )
+                            Text(
+                                text = "523,520,054",
+                                fontSize = 10.sp,
+                                color= Color.White
+                            )
+                        }
 
                     }
                     Column(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .aspectRatio(0.5f)
+                            .aspectRatio(0.2f),
+                        verticalArrangement = Arrangement.Center
                     ) {
                             Image(
                                 modifier = Modifier
@@ -289,6 +299,9 @@ fun ShoppingCart(items: List<ShoppingItem>) {
 fun DefaultPreview() {
     ShoppingCart(
         listOf(
+            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
+            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
+            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۲", "توضیحات محصول ۲", 2)
         )

@@ -34,7 +34,9 @@ fun TopBarDetails(
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxWidth()
-                .background(color = PlatinumSilver),
+                .background(color = PlatinumSilver)
+                .padding(8.dp)
+            ,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -49,13 +51,16 @@ fun TopBarDetails(
             }
             Box(
                 modifier = Modifier
-                    .size(26.dp)
-                    .padding(4.dp)
+                    .size(46.dp)
+                    .padding(9.dp)
                     .background(Color.White, shape = CircleShape),
                 contentAlignment = Alignment.Center
 
             ) {
-                Icon(imageVector = Icons.Default.ArrowBackIosNew, contentDescription = "ArrowBack")
+                Icon(
+                    imageVector = Icons.Default.ArrowBackIosNew
+                    , contentDescription = "ArrowBack"
+                )
             }
         }
     }

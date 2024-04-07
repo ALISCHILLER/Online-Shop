@@ -14,11 +14,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AmpStories
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +39,7 @@ import com.msa.onlineshopzar.ui.component.RoundedIconTextField
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
-fun ResetPassword() {
+fun NationalCodeResetPassScreen() {
     Scaffold {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
@@ -112,5 +109,5 @@ fun ResetPassword() {
 @Preview
 @Composable
 private fun ResetPasswordPreview() {
-    ResetPassword()
+    NationalCodeResetPassScreen()
 }

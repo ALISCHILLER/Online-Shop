@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,20 +33,28 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.ui.component.RadioGroup
+import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.ui.screen.detailsProduct.TopBarDetails
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
-fun ShopppingList() {
+fun ShoppingListScreen(
+    navController: NavController,
+) {
     Scaffold(
         modifier = Modifier
             .background(color = PlatinumSilver),
         topBar = {
             TopBarDetails("لیست خرید های شما")
+        },
+        bottomBar = {
+
         }
     ) {
-        val l= listOf(
+        val l = listOf(
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
@@ -52,41 +63,62 @@ fun ShopppingList() {
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
             ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۲", "توضیحات محصول ۲", 2)
+            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
         )
         var selectedOption by remember { mutableStateOf("عرفی") }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
                 modifier = Modifier
+                    .padding(it)
                     .background(color = PlatinumSilver)
-                    .fillMaxSize()
-                    .padding(it),
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceAround
             ) {
 
                 LazyColumn(
                     modifier = Modifier
-                        .weight(1f) // اینجا از وزن استفاده شده است تا LazyColumn بیشتر از فضای دیگری اشغال کند
-                        .fillMaxWidth(), // پر کردن عرض موجود در طول
+                         // اینجا از وزن استفاده شده است تا LazyColumn بیشتر از فضای دیگری اشغال کند
+                        .fillMaxWidth()
+                        .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
-                    items(l){
+                    items(l) {
                         ShoppingCardItem()
                     }
                 }
 
-                // Replace the Row containing the RadioGroup with your custom RadioGroup component
-                RadioGroup(
-                    options = listOf("عرفی", "چک", "نقدی"),
-                    selectedOption = selectedOption,
-                    onOptionSelected = { selectedOption = it }
-                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+
+                    )
+                {
+                    // Replace the Row containing the RadioGroup with your custom RadioGroup component
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceAround
+                    ) {
+                        RadioGroup(
+                            options = listOf("عرفی", "چک", "نقدی"),
+                            selectedOption = selectedOption,
+                            onOptionSelected = { selectedOption = it }
+                        )
+                    }
+
+                }
 
                 Button(
                     onClick = {
+                        navController.navigate(Route.InvoicePreviewScreen.route)
                     },
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(15.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
@@ -106,5 +138,6 @@ fun ShopppingList() {
 @Preview
 @Composable
 private fun ShopppingListPreview() {
-    ShopppingList()
+    val navController = rememberNavController()
+    ShoppingListScreen(navController)
 }
