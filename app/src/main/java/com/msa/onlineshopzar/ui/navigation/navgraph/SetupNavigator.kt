@@ -42,7 +42,7 @@ fun SetupNavigator() {
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,
-            startDestination = Route.HomeScreen.route,
+            startDestination = Route.LoginScreen.route,
 //            modifier = Modifier.padding(bottom = bottomPadding)
         ) {
             composable(route = Route.LoginScreen.route) {

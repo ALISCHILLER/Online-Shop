@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Unnamed">
+      <entry key="AccountInformationPreview">
+        <State />
+      </entry>
+      <entry key="DetailsProductScreenPreview">
+        <State />
+      </entry>
+      <entry key="OrderAddressRegistrationScreenPreview">
+        <State />
+      </entry>
+      <entry key="ProfileCustomerScreenPreview">
+        <State />
+      </entry>
+      <entry key="ProfileRestPasswordScreenPreview">
         <State />
       </entry>
       <entry key="app">
