@@ -52,7 +52,7 @@ class LoginViewModel @Inject constructor(
                 Timber.d(response.data.toString())
                 when (response.status) {
                     Resource.Status.SUCCESS-> {
-                        Log.d("LoginViewModel", "getToken SUCCESS:${response.data} ")
+                        Timber.tag("LoginViewModel").d("getToken SUCCESS: ${response.data}  " )
                         val loginResponse = response.data
                         loginResponse?.let {
                             if (!it.hasError){
@@ -64,7 +64,7 @@ class LoginViewModel @Inject constructor(
 
                     }
                     Resource.Status.ERROR -> {
-                        Log.d("LoginViewModel" , "getToken ERROR:${response.error} ")
+                        Timber.tag("LoginViewModel").d("getToken ERROR: ${response.error}" )
 
                     }
                     else -> {}
@@ -79,7 +79,7 @@ class LoginViewModel @Inject constructor(
                 Timber.d(response.data.toString())
                 when (response.status) {
                     Resource.Status.SUCCESS-> {
-                        Log.d("LoginViewModel", "getUserData SUCCESS:${response.data} ")
+                        Timber.tag("LoginViewModel").d("getUserData SUCCESS: ${response.data}" )
                         val loginResponse = response.data
                         loginResponse?.let {
                             if (!it.hasError){
@@ -90,11 +90,9 @@ class LoginViewModel @Inject constructor(
                     }
                     Resource.Status.LOADING-> {}
                     Resource.Status.ERROR -> {
-                        Log.d("LoginViewModel" , "getUserData ERROR:${response.error} ")
+                        Timber.tag("LoginViewModel").d("getUserData ERROR: ${response.error}" )
                     }
-                    else -> {
-                        Log.d("LoginViewModel" , "getUserData else:$response ")
-                    }
+                    else -> {}
                 }
             }.collect()
         }

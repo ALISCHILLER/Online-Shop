@@ -16,6 +16,7 @@ class NavManager @Inject constructor() {
 
     fun navigate(routeInfo: NavInfo?) {
         //Clear previous error, when navigating
+
         _routeInfo.update { routeInfo ?: NavInfo() }
     }
 }
