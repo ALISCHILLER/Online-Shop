@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
@@ -83,6 +82,9 @@ dependencies {
     //retrofit
     implementation (dependency.retrofit)
     implementation (dependency.converter.gson)
+    implementation(dependency.okhttp)
+    implementation (dependency.logging.interceptor)
+
     //moshi
     implementation(dependency.moshi.kotlin)
     implementation(dependency.converter.moshi)
@@ -90,6 +92,7 @@ dependencies {
     // ViewModel utilities for Compose
     implementation(dependency.androidx.lifecycle.viewmodel.ktx)
     implementation(dependency.androidx.lifecycle.viewmodel.compose)
+
     // Lifecycle utilities for Compose
     implementation(dependency.androidx.lifecycle.runtime.compose)
 
@@ -99,12 +102,16 @@ dependencies {
 
     //Room Db
     implementation(dependency.androidx.room.runtime)
-    annotationProcessor(dependency.androidx.room.compiler)
+   // annotationProcessor(dependency.androidx.room.compiler)
+    kapt(dependency.androidx.room.compiler)
+
     //material.icons
     implementation(dependency.androidx.material.icons.extended.android)
+
     //androidx.navigation
     implementation(dependency.androidx.navigation.compose)
 
     //coil loading image
     implementation(dependency.coil.compose)
+
 }

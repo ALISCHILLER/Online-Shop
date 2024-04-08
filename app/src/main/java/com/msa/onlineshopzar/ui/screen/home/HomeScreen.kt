@@ -28,6 +28,7 @@ import com.msa.onlineshopzar.ui.theme.*
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen() {
+
     Scaffold(
         modifier = Modifier
             .background(color = PlatinumSilver),

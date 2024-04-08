@@ -14,13 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.msa.onlineshopzar.ui.navigation.navgraph.NavManager
 import com.msa.onlineshopzar.ui.navigation.navgraph.SetupNavigator
 import com.msa.onlineshopzar.ui.theme.OnlineShopZarTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @ExperimentalFoundationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var navManager: NavManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

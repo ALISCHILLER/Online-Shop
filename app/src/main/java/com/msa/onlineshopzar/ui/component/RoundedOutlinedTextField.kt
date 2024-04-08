@@ -41,7 +41,7 @@ fun RoundedIconTextField(
     icon: ImageVector,
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
-    typeEnabled:Boolean=true
+    typeEnabled:Boolean=false
 ) {
     var passwordVisibility by remember { mutableStateOf(!isPassword) }
 

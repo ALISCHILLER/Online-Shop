@@ -30,7 +30,6 @@ import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     Box(
@@ -99,7 +98,7 @@ fun LoginScreen(
 
                     Button(
                         onClick = {
-                            navController.navigate(Route.HomeScreen.route)
+                                  viewModel.getToken(username,password)
                             // اینجا می‌توانید عملیات ورود را انجام دهید
                             // مثلا می‌توانید اطلاعات را به سرور ارسال کرده و ورود کاربر را بررسی کنید
                         },
@@ -122,6 +121,6 @@ fun LoginScreen(
 @Preview
 @Composable
 private fun LoginScreenPreview() {
-    val navController = rememberNavController()
-    LoginScreen(navController)
+
+    LoginScreen()
 }

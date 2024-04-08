@@ -2,6 +2,7 @@
 
 package com.msa.onlineshopzar.ui.navigation.navgraph
 
+import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -17,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.msa.onlineshopzar.MainActivity
 import com.msa.onlineshopzar.ui.navigation.bottomNav.BottomNavaghtion
 import com.msa.onlineshopzar.ui.screen.accountInformation.AccountInformationScreen
 import com.msa.onlineshopzar.ui.screen.basket.ShoppingListScreen
@@ -36,10 +41,31 @@ import com.msa.onlineshopzar.ui.theme.OnlineShopZarTheme
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
-fun SetupNavigator() {
+fun MainActivity.SetupNavigator() {
 
     val navController = rememberNavController()
     val backStackState = navController.currentBackStackEntryAsState().value
+
+
+    val navInfo by navManager.routeInfo.collectAsState()
+    LaunchedEffect(key1 = navInfo) {
+        navInfo.id?.let {
+            if (it == Route.BACK.route) {
+                // firebaseAnalytics.logEvent("Click_Back",null)
+
+                navController.navigateUp()
+                navManager.navigate(null)
+                return@let
+            }
+            var bundle= Bundle()
+            bundle.putString("link",it)
+            // firebaseAnalytics.logEvent("Click_Navigate",bundle)
+
+            navController.navigate(it, navOptions = navInfo.navOption)
+            navManager.navigate(null)
+        }
+
+    }
 
     Scaffold(
         bottomBar = {
@@ -67,7 +93,7 @@ fun SetupNavigator() {
             composable(route = Route.SplashScreen.route) { SplashScreen() }
 
             //Login
-            composable(route = Route.LoginScreen.route) { LoginScreen(navController) }
+            composable(route = Route.LoginScreen.route) { LoginScreen() }
             composable(route = Route.NationalCodeResetPassScreen.route) { NationalCodeResetPassScreen() }
             composable(route = Route.OtpScreen.route) { OtpScreen() }
 
@@ -108,7 +134,7 @@ private fun SetupNavigatorPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SetupNavigator()
+
         }
     }
 }
