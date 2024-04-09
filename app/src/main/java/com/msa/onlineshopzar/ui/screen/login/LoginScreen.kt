@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.msa.onlineshopzar.ui.screen.login
 
 import androidx.compose.foundation.Image
@@ -10,9 +12,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,13 +29,27 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.R
+import com.msa.onlineshopzar.ui.component.DialogErrorState
+import com.msa.onlineshopzar.ui.component.DialogLoadingWait
 import com.msa.onlineshopzar.ui.component.RoundedIconTextField
 import com.msa.onlineshopzar.ui.navigation.navgraph.Route
+import com.msa.onlineshopzar.utils.dialog.Sample
 
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
+
+    val homeState by viewModel.loginState.collectAsState()
+    val onReset = { currentSample.value = homeState.isLoading }
+    if (homeState.isLoading) {
+        DialogLoadingWait(onReset)
+    }
+
+    homeState.error?.let { DialogErrorState(it,{}) }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

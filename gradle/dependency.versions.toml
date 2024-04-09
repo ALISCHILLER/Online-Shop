@@ -16,6 +16,8 @@ roomRuntime = "2.6.1"
 coilCompose = "2.6.0"
 loggingInterceptor = "4.12.0"
 okhttp = "4.12.0"
+state = "1.3.0"
+
 [libraries]
 
 #room
@@ -23,7 +25,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 
 
-
+state = { module = "com.maxkeppeler.sheets-compose-dialogs:state", version.ref = "state" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # lifecycle

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import com.msa.onlineshopzar.data.model.GeneralStateModel
 import com.msa.onlineshopzar.data.remote.repository.LoginRepository
 import com.msa.onlineshopzar.data.remote.utils.Resource
 import com.msa.onlineshopzar.data.request.TokenRequest
@@ -15,8 +16,11 @@ import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.utils.CompanionValues
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -29,6 +33,9 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ):ViewModel(){
 
+
+    private val _loginState: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
+    val loginState: StateFlow<GeneralStateModel> = _loginState
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
@@ -61,11 +68,16 @@ class LoginViewModel @Inject constructor(
                         }
                     }
                     Resource.Status.LOADING-> {
-
+                        _loginState.update { it.copy(isLoading = true) }
                     }
                     Resource.Status.ERROR -> {
                         Timber.tag("LoginViewModel").d("getToken ERROR: ${response.error}" )
-
+                        val loginResponse = response.data
+                        loginResponse?.also {error ->
+                                _loginState.update { it.copy(isLoading = false, error = error.message) }
+                        }.let {
+                            _loginState.update { it.copy(isLoading = false, error = response.error?.message) }
+                        }
                     }
                     else -> {}
                 }

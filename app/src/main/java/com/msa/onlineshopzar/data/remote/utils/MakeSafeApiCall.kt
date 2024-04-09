@@ -22,7 +22,7 @@ class MakeSafeApiCall @Inject constructor(
                 }else
                     emit(Resource.error(error = MsaError(code = ErrorCode.NULL_RESPONSE_BODY)))
             } else {
-                     emit(Resource.error(null, error = MsaError(response.code(),response.message())))
+                     emit(Resource.error(response.body(), error = MsaError(response.code(),response.message())))
             }
         } else {
             emit(Resource.error(error = MsaError(code = ErrorCode.NETWORK_NOT_AVAILABLE)))

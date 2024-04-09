@@ -114,4 +114,7 @@ dependencies {
     //coil loading image
     implementation(dependency.coil.compose)
 
+
+
+    implementation (dependency.state)
 }
