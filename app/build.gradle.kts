@@ -104,6 +104,7 @@ dependencies {
     implementation(dependency.androidx.room.runtime)
    // annotationProcessor(dependency.androidx.room.compiler)
     kapt(dependency.androidx.room.compiler)
+    implementation(dependency.androidx.room.ktx)
 
     //material.icons
     implementation(dependency.androidx.material.icons.extended.android)

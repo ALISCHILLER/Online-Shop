@@ -28,7 +28,7 @@ class LoginRepository @Inject constructor(
                     tokenRequest
                 )
             }
-        }
+        } as Flow<Resource<TokenModel?>>
     }
 
     suspend fun getUserData(
@@ -38,7 +38,7 @@ class LoginRepository @Inject constructor(
                 apiService.getUserData()
 
             }
-        }
+        } as Flow<Resource<UserModel?>>
     }
 
 

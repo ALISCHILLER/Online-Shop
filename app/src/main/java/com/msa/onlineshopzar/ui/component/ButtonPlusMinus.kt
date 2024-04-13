@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -64,6 +65,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
+
+
 private const val ICON_BUTTON_ALPHA_INITIAL = 0.3f
 private const val CONTAINER_BACKGROUND_ALPHA_INITIAL = 0.6f
 private const val CONTAINER_BACKGROUND_ALPHA_MAX = 0.7f
@@ -91,8 +94,8 @@ fun CounterButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .width(90.dp)
-            .height(30.dp)
+            .width(100.dp)
+            .height(50.dp)
     ) {
         val thumbOffsetX = remember { Animatable(0f) }
         val thumbOffsetY = remember { Animatable(0f) }
@@ -145,7 +148,7 @@ private fun ButtonContainer(
                     (thumbOffsetY * CONTAINER_OFFSET_FACTOR).toInt(),
                 )
             }
-            .border(border = BorderStroke(width = 1.dp, Color.LightGray), shape =  RoundedCornerShape(18.dp))
+            .border(border = BorderStroke(width = 1.dp, Color.LightGray), shape =  CircleShape)
             .fillMaxSize()
             .clip(RoundedCornerShape(64.dp))
             .background(
@@ -241,13 +244,13 @@ private fun IconControlButton(
         interactionSource = interactionSource,
         enabled = enabled,
         modifier = modifier
-            .size(18.dp)
+            .size(19.dp)
     ) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
             tint = if (isPressed) clickTintColor else tintColor,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(14.dp)
         )
     }
 }
@@ -284,7 +287,7 @@ private fun DraggableThumbButton(
                 )
             }
             .shadow(8.dp, shape = CircleShape)
-            .size(24.dp)
+            .size(38.dp)
             .clip(CircleShape)
             .clickable {
                 // only allow clicks while not dragging
@@ -396,7 +399,7 @@ private fun DraggableThumbButton(
                                 targetValue = 0f,
                                 animationSpec = spring(
                                     dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = StiffnessLow
+                                    stiffness = Spring.StiffnessLow
                                 )
                             )
                         } else if (dragDirection.value == DragDirection.VERTICAL && thumbOffsetY.value != 0f) {
@@ -404,7 +407,7 @@ private fun DraggableThumbButton(
                                 targetValue = 0f,
                                 animationSpec = spring(
                                     dampingRatio = Spring.DampingRatioMediumBouncy,
-                                    stiffness = StiffnessLow
+                                    stiffness = Spring.StiffnessLow
                                 )
                             )
                         }
@@ -417,8 +420,7 @@ private fun DraggableThumbButton(
             color = Color.White,
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            fontSize = 10.sp
-
+            fontSize = 12.sp
         )
     }
 }
@@ -429,6 +431,9 @@ private fun Dp.dpToPx() = with(LocalDensity.current) { this@dpToPx.toPx() }
 private enum class DragDirection {
     NONE, HORIZONTAL, VERTICAL
 }
+
+
+
 
 @Preview
 @Composable

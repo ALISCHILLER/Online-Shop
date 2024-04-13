@@ -6,4 +6,10 @@
 
 package com.msa.onlineshopzar.data.remote.utils
 
-data class MsaError(val code:Int = -1,  val message:String?=null)
+import okhttp3.ResponseBody
+
+data class MsaError(
+    val code:Int = -1,
+    val dataError: ResponseBody? =null,
+    val message:String ?=null
+)

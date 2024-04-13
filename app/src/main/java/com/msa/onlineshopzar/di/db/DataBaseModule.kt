@@ -3,6 +3,7 @@ package com.msa.onlineshopzar.di.db
 import android.content.Context
 import androidx.room.Room
 import com.msa.onlineshopzar.data.local.AppDatabase
+import com.msa.onlineshopzar.data.local.dao.ProductDao
 import com.msa.onlineshopzar.data.local.dao.UserDao
 import com.msa.onlineshopzar.utils.CompanionValues
 import dagger.Module
@@ -21,11 +22,15 @@ class DataBaseModule {
 
     @Provides
     @Singleton
-    fun providerRoleDao(appDatabase: AppDatabase) : UserDao {
+    fun providerUserDao(appDatabase: AppDatabase) : UserDao {
         return appDatabase.userDao()
     }
 
-
+    @Provides
+    @Singleton
+    fun providerProductDao(appDatabase: AppDatabase) : ProductDao {
+        return appDatabase.productDao()
+    }
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {

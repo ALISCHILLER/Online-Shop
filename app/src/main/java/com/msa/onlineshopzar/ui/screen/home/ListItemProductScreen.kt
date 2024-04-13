@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -31,12 +32,19 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.msa.onlineshopzar.R
+import com.msa.onlineshopzar.data.local.entity.ProductModelEntity
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
-fun ListItemProductScreen() {
+fun ListItemProductScreen(
+    productModelEntity: ProductModelEntity
+) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        var value1 by remember { mutableStateOf(0) }
+        var value2 by remember { mutableStateOf(0) }
+
+
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -68,13 +76,15 @@ fun ListItemProductScreen() {
                         )
                     }
 
-                    Text(
-                        text = "پاستا فتوچینی آشیانهای سبزیجات زر ماکارون",
-                        modifier = Modifier.padding(vertical = 8.dp)
+                    productModelEntity.productName?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier.padding(vertical = 8.dp)
 
-                    )
+                        )
+                    }
 
-                    var valueCounter by remember { mutableStateOf(0) }
+
 
                     Column(modifier = Modifier.padding(5.dp)) {
                         Row(
@@ -84,48 +94,59 @@ fun ListItemProductScreen() {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = "بسته:(1عدد)",
-                                fontSize = 10.sp
-                            )
+
+                            productModelEntity.fullNameKala1?.let {
+                                Text(
+                                    text = it,
+                                    fontSize = 10.sp
+                                )
+                            }
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 CounterButton(
-                                    value = valueCounter.toString(),
+                                    value = value1.toString(),
                                     onValueIncreaseClick = {
-                                        valueCounter += 1
+                                        value1 += 1
                                     },
                                     onValueDecreaseClick = {
-                                        valueCounter = maxOf(valueCounter - 1, 0)
+                                        value1 = maxOf(value1 - 1, 0)
                                     },
                                     onValueClearClick = {
-                                        valueCounter = 0
+                                        value1 = 0
                                     }
                                 )
                             }
                         }
 
+                        var check by remember { mutableStateOf(0f) }
+                        productModelEntity.fullNameKala2?.let {
+                            check=100f
+                        }
                         Row(
                             modifier = Modifier
                                 .padding(vertical = 3.dp)
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .alpha(check)
+                            ,
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = "کارتن:(32عدد)",
-                                fontSize = 10.sp
-                            )
+                            productModelEntity.fullNameKala2?.let {
+                                Text(
+                                    text = it,
+                                    fontSize = 10.sp
+                                )
+                            }
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 CounterButton(
-                                    value = valueCounter.toString(),
+                                    value = value2.toString(),
                                     onValueIncreaseClick = {
-                                        valueCounter += 1
+                                        value2 += 1
                                     },
                                     onValueDecreaseClick = {
-                                        valueCounter = maxOf(valueCounter - 1, 0)
+                                        value2 = maxOf(value2 - 1, 0)
                                     },
                                     onValueClearClick = {
-                                        valueCounter = 0
+                                        value2 = 0
                                     }
                                 )
                             }
@@ -143,10 +164,12 @@ fun ListItemProductScreen() {
                                 text = "مبلغ ناخالص:",
                                 fontSize = 10.sp
                             )
-                            Text(
-                                text = "523,520,054",
-                                fontSize = 10.sp
-                            )
+                            productModelEntity.salePrice?.let {
+                                Text(
+                                    text = it,
+                                    fontSize = 12.sp
+                                )
+                            }
                         }
                     }
 
@@ -158,8 +181,26 @@ fun ListItemProductScreen() {
 }
 
 
+
 @Preview
 @Composable
 private fun ListItemProductScreenPreview() {
-    ListItemProductScreen()
+     ListItemProductScreen(
+         ProductModelEntity(
+             "11",
+             convertFactor1 = 12,
+             convertFactor2 = 12,
+             fullNameKala1 = "sad",
+             fullNameKala2 = null,
+             productCode = 659985,
+             productGroupCode = 54544,
+             productName = "jghhjighj",
+             unit1 ="sadsad",
+             unit2 = "sadasd",
+             unitid1="54654",
+             unitid2 = "4565",
+             salePrice = "12354354",
+             productImage = ""
+         )
+     )
 }

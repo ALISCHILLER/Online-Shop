@@ -29,8 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.R
-import com.msa.onlineshopzar.ui.component.DialogErrorState
 import com.msa.onlineshopzar.ui.component.DialogLoadingWait
+import com.msa.onlineshopzar.ui.component.ErrorDialog
 import com.msa.onlineshopzar.ui.component.RoundedIconTextField
 import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.utils.dialog.Sample
@@ -42,13 +42,12 @@ fun LoginScreen(
 
     val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
 
-    val homeState by viewModel.loginState.collectAsState()
-    val onReset = { currentSample.value = homeState.isLoading }
-    if (homeState.isLoading) {
+    val state by viewModel.state.collectAsState()
+    val onReset = { currentSample.value = state.isLoading }
+    if (state.isLoading) {
         DialogLoadingWait(onReset)
     }
 
-    homeState.error?.let { DialogErrorState(it,{}) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -60,6 +59,13 @@ fun LoginScreen(
             contentScale = ContentScale.FillBounds
         )
 
+        state.error?.let {
+                ErrorDialog(
+                    it,
+                    {viewModel.clearState()},
+                    false
+                )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()

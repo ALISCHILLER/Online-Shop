@@ -16,23 +16,23 @@ package com.msa.onlineshopzar.data.remote.utils
 
 
 
-data class Resource<out T>(val status: Status, val data: T?, val error: MsaError?){
+data class Resource<out T>(val status: Status, val data: T?, val error: MsaError? , val errorBody:T?){
 
     companion object {
         //Handles success
         fun <T> success(data: T): Resource<T> = Resource(
-            status = Status.SUCCESS, data = data, error = null)
+            status = Status.SUCCESS, data = data, error = null, errorBody = data )
         //Handles Loading
         fun <T> loading(data: T?=null): Resource<T> = Resource(
-            status = Status.LOADING, data = data, error = null)
+            status = Status.LOADING, data = data, error = null, errorBody = data )
         //Handles Error
-        fun <T> error(data: T?=null, error: MsaError?=null): Resource<T> = Resource(
-            status = Status.ERROR, data = data, error=error)
-        fun<T> idle(data:T?=null) = Resource (status = Status.NONE, data = data, error = null)
+        fun <T> error(data: T?=null, error: MsaError?=null, errorBody:T?=null): Resource<T> = Resource(
+            status = Status.ERROR, data = data, error=error , errorBody= errorBody)
+//        fun<T> idle(data:T?=null) = Resource (status = Status.NONE, data = data, error = null,errorBody = data)
 
     }
     enum class Status {
-        NONE,
+//        NONE,
         SUCCESS,
         ERROR,
         LOADING

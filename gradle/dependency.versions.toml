@@ -13,6 +13,7 @@ lifecycleRuntimeKtx = "2.7.0"
 timber = "5.0.1"
 roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
+roomKtx = "2.6.1"
 coilCompose = "2.6.0"
 loggingInterceptor = "4.12.0"
 okhttp = "4.12.0"
@@ -23,7 +24,7 @@ state = "1.3.0"
 #room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 
 state = { module = "com.maxkeppeler.sheets-compose-dialogs:state", version.ref = "state" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
