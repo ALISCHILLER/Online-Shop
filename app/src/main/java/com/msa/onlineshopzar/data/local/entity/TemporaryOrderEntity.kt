@@ -3,8 +3,8 @@ package com.msa.onlineshopzar.data.local.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("Product")
-data class ProductModelEntity(
+@Entity("temporaryOrder")
+data class TemporaryOrderEntity(
     @PrimaryKey
     val id: String,
     val convertFactor1: Int?,
@@ -20,5 +20,6 @@ data class ProductModelEntity(
     val unitid2: String?,
     val salePrice: String,
     val productImage: String?,
-
+    val numberOrder: String?,
+    val unitOrder: String?,
 )

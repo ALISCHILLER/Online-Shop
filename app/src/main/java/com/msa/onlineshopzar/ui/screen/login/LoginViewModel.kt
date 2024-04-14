@@ -2,7 +2,10 @@ package com.msa.onlineshopzar.ui.screen.login
 
 import android.content.ContentValues.TAG
 import android.content.SharedPreferences
+import android.provider.Settings.Global.putString
+import android.system.Os.remove
 import android.util.Log
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
@@ -16,13 +19,13 @@ import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.utils.CompanionValues
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -89,6 +92,7 @@ class LoginViewModel @Inject constructor(
 
     fun getUserData(){
         viewModelScope.launch {
+            delay(1000)
             loginRepository.getUserData().onEach { response ->
                 Timber.d(response.data.toString())
                 when (response.status) {
@@ -120,11 +124,16 @@ class LoginViewModel @Inject constructor(
 
 
     private suspend fun saveUserNameAndPassword(token: String?) {
-        sharedPreferences
-            .edit()
-            .putString(CompanionValues.TOKEN, token)
-            .apply()
-
-        getUserData()
+        viewModelScope.launch {
+            // حذف توکن قبلی
+            sharedPreferences.edit {
+                remove(CompanionValues.TOKEN)
+            }
+// ذخیره کردن توکن جدید
+            sharedPreferences.edit {
+                putString(CompanionValues.TOKEN, token)
+            }
+            getUserData()
+        }
     }
 }

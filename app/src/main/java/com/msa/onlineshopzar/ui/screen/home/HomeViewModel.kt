@@ -2,6 +2,7 @@ package com.msa.onlineshopzar.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
 import com.msa.onlineshopzar.data.local.entity.ProductModelEntity
 import com.msa.onlineshopzar.data.model.GeneralStateModel
 import com.msa.onlineshopzar.data.remote.repository.HomeRepository
@@ -30,6 +31,10 @@ class HomeViewModel @Inject constructor(
     private val _allTasks =
         MutableStateFlow<List<ProductModelEntity>>(emptyList())
     val allTasks: StateFlow<List<ProductModelEntity>> = _allTasks
+
+    private val _allProductGroup =
+        MutableStateFlow<List<ProductGroupEntity>>(emptyList())
+    val allProductGroup: StateFlow<List<ProductGroupEntity>> = _allProductGroup
     fun ProductRequest(){
         viewModelScope.launch {
             homeRepository.productRequest().onEach { response ->
@@ -41,20 +46,17 @@ class HomeViewModel @Inject constructor(
                         responseData?.let { data ->
                             if (!data.hasError){
                                 homeRepository.insertProduct(data.data)
-                                getAllTasks()
+                                getAllProduct()
                             }else
-                                _state.update { it.copy(isLoading = false, error = data.message) }
+                                updateStateError(data.message)
                         }
                     }
                     Resource.Status.LOADING-> {
-                        _state.update { it.copy(isLoading = true) }
+                        updateStateLoading()
                     }
                     Resource.Status.ERROR -> {
                         Timber.tag("HomeViewModel").e("ProductRequest ERROR: ${response.error}" )
-                        val responseData = response.error
-                        responseData?.let { error ->
-                            _state.update { it.copy(isLoading = false, error = error.message) }
-                        }
+                        updateStateError(response.error?.message)
                     }
 
                 }
@@ -72,33 +74,70 @@ class HomeViewModel @Inject constructor(
                         val responseData = response.data
                         responseData?.let { data ->
                             if (!data.hasError){
-
+                                homeRepository.insertProductGroup(data.data)
+                                getAllProductGroup()
                             }else
-                                _state.update { it.copy(isLoading = false, error = data.message) }
+                                updateStateError(data.message)
                         }
                     }
                     Resource.Status.LOADING-> {
-                        _state.update { it.copy(isLoading = true) }
+                        updateStateLoading()
                     }
                     Resource.Status.ERROR -> {
                         Timber.tag("HomeViewModel").e("ProductRequest ERROR: ${response.error}" )
-                        val responseData = response.error
-                        responseData?.let { error ->
-                            _state.update { it.copy(isLoading = false, error = error.message) }
-                        }
+                            updateStateError(response.error?.message)
+
                     }
 
                 }
             }.collect()
         }
     }
-    private fun getAllTasks() {
+    private fun getAllProduct() {
             viewModelScope.launch {
                 delay(1000)
                 homeRepository.getAllProduct.collect {
-                    _state.update { it.copy(isLoading = false) }
+                    updateStateLoading(false)
                     _allTasks.value = it
                 }
             }
         }
+
+    fun getProduct(productGroup: ProductGroupEntity) {
+        viewModelScope.launch {
+            if (productGroup.productGroupCode != 0)
+            homeRepository.getProduct(productGroup.productGroupCode).collect {
+                _allTasks.value = it
+            }
+            else
+                homeRepository.getAllProduct.collect {
+                    updateStateLoading(false)
+                    _allTasks.value = it
+                }
+        }
+    }
+    private fun getAllProductGroup() {
+        viewModelScope.launch {
+            delay(1000)
+            homeRepository.getAllProductGroup.collect {
+                updateStateLoading(false)
+                _allProductGroup.value = it
+            }
+        }
+    }
+
+
+    private fun updateStateLoading() {
+        _state.value = _state.value.copy(isLoading = true, error = null)
+    }
+
+    private fun updateStateLoading(isLoading: Boolean) {
+        _state.value = _state.value.copy(isLoading = isLoading, error = null)
+    }
+    private fun updateStateError(errorMessage: String?) {
+        _state.value = _state.value.copy(isLoading = false, error = errorMessage)
+    }
+
 }
+
+

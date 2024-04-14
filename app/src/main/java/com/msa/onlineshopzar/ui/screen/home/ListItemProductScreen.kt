@@ -31,19 +31,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.data.local.entity.ProductModelEntity
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
+import com.msa.onlineshopzar.utils.Currency
 
 @Composable
 fun ListItemProductScreen(
-    productModelEntity: ProductModelEntity
+    productModelEntity: ProductModelEntity,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         var value1 by remember { mutableStateOf(0) }
         var value2 by remember { mutableStateOf(0) }
-
+        // تابع برای محاسبه قیمت به‌روز شده
+        val totalPrice by remember(value1, value2, productModelEntity) {
+            mutableStateOf(calculateTotalPrice(value1, value2, productModelEntity))
+        }
 
         Column(
             modifier = Modifier
@@ -164,12 +170,12 @@ fun ListItemProductScreen(
                                 text = "مبلغ ناخالص:",
                                 fontSize = 10.sp
                             )
-                            productModelEntity.salePrice?.let {
+
                                 Text(
-                                    text = it,
+                                    text = Currency(totalPrice.toString()).toFormattedString(),
                                     fontSize = 12.sp
                                 )
-                            }
+
                         }
                     }
 
@@ -188,19 +194,27 @@ private fun ListItemProductScreenPreview() {
      ListItemProductScreen(
          ProductModelEntity(
              "11",
-             convertFactor1 = 12,
+             convertFactor1 = 1,
              convertFactor2 = 12,
-             fullNameKala1 = "sad",
-             fullNameKala2 = null,
+             fullNameKala1 = "biscuit (1)",
+             fullNameKala2 = "biscuit (2)",
              productCode = 659985,
              productGroupCode = 54544,
-             productName = "jghhjighj",
-             unit1 ="sadsad",
-             unit2 = "sadasd",
+             productName = "biscuit",
+             unit1 ="shelf",
+             unit2 = "Carton",
              unitid1="54654",
              unitid2 = "4565",
-             salePrice = "12354354",
+             salePrice = "98565",
              productImage = ""
          )
      )
+}
+
+// تابع برای محاسبه قیمت به‌روز شده
+private fun calculateTotalPrice(value1: Int, value2: Int, productModelEntity: ProductModelEntity): Float {
+    val valueNumber = (value2 * productModelEntity.convertFactor2)+value1
+    val salePrice =valueNumber * productModelEntity.salePrice.toFloat()
+
+    return salePrice
 }

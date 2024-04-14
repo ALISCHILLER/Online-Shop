@@ -52,20 +52,21 @@ object Providers {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        val sharedPreferences = context.getSharedPreferences("secret_shared_prefs", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString(CompanionValues.TOKEN, "")
-
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-            .addInterceptor { chain ->
-                val newRequest: Request = chain.request().newBuilder()
-                    .header("Authorization", "Bearer $token")
-                    .build()
-                chain.proceed(newRequest)
-            }
+            .addInterceptor(interceptor(context))
             .build()
+    }
+    private fun interceptor(@ApplicationContext context: Context) = Interceptor { chain ->
+        val sharedPreferences = context.getSharedPreferences("secret_shared_prefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString(CompanionValues.TOKEN, "")
+
+        val newRequest: Request = chain.request().newBuilder()
+            .header("Authorization", "Bearer $token")
+            .build()
+        chain.proceed(newRequest)
     }
 
     @Singleton

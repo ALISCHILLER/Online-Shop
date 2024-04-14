@@ -1,7 +1,9 @@
 package com.msa.onlineshopzar.data.remote.repository
 
 import com.msa.onlineshopzar.data.local.dao.ProductDao
+import com.msa.onlineshopzar.data.local.dao.ProductGroupDao
 import com.msa.onlineshopzar.data.local.dao.UserDao
+import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
 import com.msa.onlineshopzar.data.local.entity.ProductModelEntity
 import com.msa.onlineshopzar.data.model.ProductGroup
 import com.msa.onlineshopzar.data.model.ProductGroupModel
@@ -19,10 +21,15 @@ import javax.inject.Inject
 class HomeRepository @Inject constructor(
     private val apiService: ApiService,
     private val apiManager: MakeSafeApiCall,
-    private val  productDao: ProductDao
+    private val  productDao: ProductDao,
+    private val productGroupDao: ProductGroupDao
 )  {
 
-    val getAllProduct: Flow<List<ProductModelEntity>> = productDao.getAllProductModel()
+    val getAllProduct: Flow<List<ProductModelEntity>> = productDao.getAll()
+    fun getProduct(code: Int): Flow<List<ProductModelEntity>> {
+        return productDao.getProduct(code)
+    }
+    val getAllProductGroup: Flow<List<ProductGroupEntity>> = productGroupDao.getAll()
     suspend fun productRequest(
     ): Flow<Resource<ProductModel?>> {
         return apiManager.makeSafeApiCall {
@@ -34,7 +41,7 @@ class HomeRepository @Inject constructor(
 
 
     suspend fun insertProduct(productModelEntity: List<ProductModelEntity>){
-        productDao.insertProductModel(productModelEntity)
+        productDao.insert(productModelEntity)
     }
 
     suspend fun productGroupRequest(
@@ -44,5 +51,11 @@ class HomeRepository @Inject constructor(
                 apiService.getProductGroupData()
             }
         } as Flow<Resource<ProductGroupModel?>>
+    }
+
+
+    suspend fun insertProductGroup(productGroupEntity: List<ProductGroupEntity>){
+        productGroupDao.insertZeroItem()
+        productGroupDao.insert(productGroupEntity)
     }
 }
