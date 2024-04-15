@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 data class ProductModelEntity(
     @PrimaryKey
     val id: String,
-    val convertFactor1: Int?,
+    val convertFactor1: Int,
     val convertFactor2: Int,
     val fullNameKala1: String?,
     val fullNameKala2: String?,
-    val productCode: Int?,
-    val productGroupCode: Int?,
+    val productCode: Int,
+    val productGroupCode: Int,
     val productName: String?,
     val unit1: String?,
     val unit2: String?,

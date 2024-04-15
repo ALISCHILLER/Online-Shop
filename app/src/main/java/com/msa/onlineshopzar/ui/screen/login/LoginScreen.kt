@@ -42,10 +42,17 @@ fun LoginScreen(
 
     val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
 
+    // بازیابی نام کاربری و رمز عبور از SharedPreferences
+    val savedUsername = viewModel.getSavedUsername()
+    val savedPassword = viewModel.getSavedPassword()
+
     val state by viewModel.state.collectAsState()
     val onReset = { currentSample.value = state.isLoading }
     if (state.isLoading) {
         DialogLoadingWait(onReset)
+    }
+    state.error?.let {
+        ErrorDialog(it, {}, false)
     }
 
 
@@ -73,8 +80,8 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var username by remember { mutableStateOf("") }
-            var password by remember { mutableStateOf("") }
+            var username by remember { mutableStateOf(savedUsername) }
+            var password by remember { mutableStateOf(savedPassword) }
 
             Card(
                 modifier = Modifier

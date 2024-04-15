@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,8 +30,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
-import com.msa.onlineshopzar.data.local.entity.ProductModelEntity
-import com.msa.onlineshopzar.data.model.ProductGroup
 import com.msa.onlineshopzar.ui.component.DialogLoadingWait
 import com.msa.onlineshopzar.ui.theme.*
 
@@ -42,32 +40,34 @@ fun HomeScreen(
 ) {
     var selectedProductGroup by remember { mutableStateOf<ProductGroupEntity?>(null) }
 
+    LaunchedEffect(Unit){
+        viewModel.productCheck()
+    }
+
+
     val allTasks by viewModel.allTasks.collectAsState()
+    val allOrder by viewModel.allOrder.collectAsState()
+    val user by viewModel.user.collectAsState()
     val allProductGroup by viewModel.allProductGroup.collectAsState()
     val homeState by viewModel.state.collectAsState()
 
     val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
     val onReset = { currentSample.value = homeState.isLoading }
 
-
-
-
     if (homeState.isLoading) {
         DialogLoadingWait(onReset)
     }
 
 
-    if (allTasks.isEmpty()) viewModel.apply {
-        ProductRequest()
-        ProductGroupRequest()
-    }
+
+
 
 
     Scaffold(
         modifier = Modifier
             .background(color = PlatinumSilver),
         topBar = {
-            HomeTopBar()
+            user?.let { HomeTopBar(it) }
         }
     ) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -100,7 +100,10 @@ fun HomeScreen(
                         .weight(1.0f),
                 ) {
                     items(allTasks) {
-                        ListItemProductScreen(it)
+                        ListItemProductScreen(
+                            it,
+                            orderEntity =  allOrder
+                        )
                     }
                 }
             }

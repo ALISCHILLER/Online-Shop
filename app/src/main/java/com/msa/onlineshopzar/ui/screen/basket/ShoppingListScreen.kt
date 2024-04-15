@@ -22,6 +22,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,17 +35,22 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.msa.onlineshopzar.ui.component.RadioGroup
 import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.ui.screen.detailsProduct.TopBarDetails
+import com.msa.onlineshopzar.ui.screen.home.HomeViewModel
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
 fun ShoppingListScreen(
     navController: NavController,
+    viewModel: ShoppingViewModel = hiltViewModel()
 ) {
+
+
     Scaffold(
         modifier = Modifier
             .background(color = PlatinumSilver),
@@ -54,17 +61,12 @@ fun ShoppingListScreen(
 
         }
     ) {
-        val l = listOf(
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-            ShoppingItem("محصول ۱", "توضیحات محصول ۱", 1),
-        )
+
+        LaunchedEffect(Unit){
+            viewModel.getAllOrder()
+        }
+
+        val allTasks by viewModel.allOrder.collectAsState()
         var selectedOption by remember { mutableStateOf("عرفی") }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
@@ -78,12 +80,12 @@ fun ShoppingListScreen(
 
                 LazyColumn(
                     modifier = Modifier
-                         // اینجا از وزن استفاده شده است تا LazyColumn بیشتر از فضای دیگری اشغال کند
+                        // اینجا از وزن استفاده شده است تا LazyColumn بیشتر از فضای دیگری اشغال کند
                         .fillMaxWidth()
                         .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
-                    items(l) {
-                        ShoppingCardItem()
+                    items(allTasks) {
+                        ShoppingCardItem(it)
                     }
                 }
 

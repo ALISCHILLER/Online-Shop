@@ -6,12 +6,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 
 
-data class AccountItem(val name: String, val icon: ImageVector)
+data class AccountItem(val id:Int ,val name: String, val icon: ImageVector)
 fun createAccountItems(): List<AccountItem> {
     return listOf(
-        AccountItem("اطلاعات حساب", Icons.Outlined.Person),
-        AccountItem("تغییر رمز عبور", Icons.Outlined.Lock),
-        AccountItem("آدرس‌ها", Icons.Outlined.LocationOn),
-        AccountItem("خروج از برنامه", Icons.Outlined.ExitToApp)
+        AccountItem(1,"اطلاعات حساب", Icons.Outlined.Person),
+        AccountItem(2,"تغییر رمز عبور", Icons.Outlined.Lock),
+        AccountItem(3,"آدرس‌ها", Icons.Outlined.LocationOn),
+        AccountItem(4,"خروج از برنامه", Icons.Outlined.ExitToApp)
     )
 }

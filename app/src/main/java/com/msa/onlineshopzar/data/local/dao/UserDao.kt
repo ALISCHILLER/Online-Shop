@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.msa.onlineshopzar.data.local.entity.UserModelEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -15,5 +16,5 @@ interface UserDao {
     @Query("DELETE FROM user")
     fun deleteUserLogin()
     @Query("SELECT * FROM user")
-    fun getUserLogin():UserModelEntity
+    fun getUserLogin(): Flow<UserModelEntity>
 }

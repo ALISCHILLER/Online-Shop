@@ -22,4 +22,11 @@ interface ProductDao {
 
     @Query("SELECT * FROM product where productGroupCode= :code")
     fun getProduct(code:Int): Flow<List<ProductModelEntity>>
+
+    @Query("SELECT COUNT(*) FROM product")
+     fun getProductCount(): Int
+
+
+    @Query("SELECT * FROM product WHERE productName LIKE '%' || :searchQuery ||  '%'")
+     fun searchProducts(searchQuery: String): Flow<List<ProductModelEntity>>
 }

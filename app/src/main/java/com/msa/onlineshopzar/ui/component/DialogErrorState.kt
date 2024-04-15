@@ -52,8 +52,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ErrorDialog(message: String, onDismiss: (Boolean) -> Unit, hide:Boolean) {
-    var hideDialog by remember { mutableStateOf(hide) }
-    if (!hideDialog) {
+    var hideDialog by remember { mutableStateOf(false) }
+    if (!hide) {
         Dialog(
             onDismissRequest = { onDismiss(true) },
         ) {
@@ -100,7 +100,7 @@ fun ErrorDialog(message: String, onDismiss: (Boolean) -> Unit, hide:Boolean) {
 
                         )
                         OutlinedButton(
-                            onClick = { hideDialog = true },
+                            onClick = { onDismiss(true) },
                             border = BorderStroke(1.dp, Color.Red),
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Red)

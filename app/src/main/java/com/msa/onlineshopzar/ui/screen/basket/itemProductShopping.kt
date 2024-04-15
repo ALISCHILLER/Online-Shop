@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.msa.onlineshopzar.ui.theme.OnlineShopZarTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -45,6 +46,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
@@ -62,10 +64,14 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.R
+import com.msa.onlineshopzar.data.local.entity.OrderEntity
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 import com.msa.onlineshopzar.ui.theme.lightcoral
+import com.msa.onlineshopzar.utils.Currency
+import kotlinx.coroutines.flow.MutableStateFlow
 
 //itemName: String,
 //itemDesc: String,
@@ -75,8 +81,13 @@ import com.msa.onlineshopzar.ui.theme.lightcoral
 //onDelete: () -> Unit
 @Composable
 fun ShoppingCardItem(
-
+    order: OrderEntity,
+    viewModel: ShoppingViewModel = hiltViewModel()
 ) {
+
+    // تابع برای محاسبه قیمت به‌روز شده
+
+
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Card(
@@ -88,6 +99,15 @@ fun ShoppingCardItem(
                 containerColor = Color.White
             )
         ) {
+
+
+            var value1 by remember { mutableStateOf(0) }
+            var value2 by remember { mutableStateOf(0) }
+
+            val totalPrice by remember(value1, value2, order) {
+                mutableStateOf(viewModel.calculateTotalPrice(value1, value2, order))
+            }
+
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -131,22 +151,24 @@ fun ShoppingCardItem(
                             text = "قیمت هر عدد:"
                         )
 
-                        Text(
-                            modifier = Modifier
-                                .padding(5.dp)
-                                .fillMaxWidth(),
-                            text = "562,363"
-                        )
+                        order.salePrice?.let {
+                            Text(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth(),
+                                text = Currency(it).toFormattedString()
+                            )
+                        }
 
                     }
-                    var valueCounter by remember { mutableStateOf(0) }
+
                     Column(
                         modifier = Modifier
                             .padding(5.dp)
                             .aspectRatio(1.1f),
                         verticalArrangement = Arrangement.SpaceAround
                     ){
-                        Text(text = "پاستا فتوچینی آشیانه ای زر ماکارون")
+                        order.productName?.let { Text(text = it) }
 
                             Row(
                                 modifier = Modifier
@@ -156,53 +178,61 @@ fun ShoppingCardItem(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceAround
                             ) {
-                                Text(
-                                    text = "بسته:(1عدد)",
-                                    fontSize = 10.sp
-                                )
+                                order.fullNameKala1?.let {
+                                    Text(
+                                        text = it,
+                                        fontSize = 10.sp
+                                    )
+                                }
                                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                     CounterButton(
-                                        value = valueCounter.toString(),
+                                        value = order.numberOrder1.toString(),
                                         onValueIncreaseClick = {
-                                            valueCounter += 1
+                                            value1 += 1
                                         },
                                         onValueDecreaseClick = {
-                                            valueCounter = maxOf(valueCounter - 1, 0)
+                                            value1 = maxOf(value1 - 1, 0)
                                         },
                                         onValueClearClick = {
-                                            valueCounter = 0
+                                            value1 = 0
                                         }
                                     )
                                 }
                             }
 
-                            Row(
-                                modifier = Modifier
-                                    .padding(vertical = 3.dp)
-                                    .fillMaxWidth()
-                                ,
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceAround
-                            ) {
+                        var check by remember { mutableStateOf(0f) }
+                        order.fullNameKala2?.let {
+                            check = 100f
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 3.dp)
+                                .fillMaxWidth()
+                                .alpha(check),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceAround
+                        ) {
+                            order.fullNameKala2?.let {
                                 Text(
-                                    text = "کارتن:(32عدد)",
+                                    text = it,
                                     fontSize = 10.sp
                                 )
-                                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                    CounterButton(
-                                        value = valueCounter.toString(),
-                                        onValueIncreaseClick = {
-                                            valueCounter += 1
-                                        },
-                                        onValueDecreaseClick = {
-                                            valueCounter = maxOf(valueCounter - 1, 0)
-                                        },
-                                        onValueClearClick = {
-                                            valueCounter = 0
-                                        }
-                                    )
-                                }
                             }
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                CounterButton(
+                                    value = order.numberOrder2.toString(),
+                                    onValueIncreaseClick = {
+                                        value2 += 1
+                                    },
+                                    onValueDecreaseClick = {
+                                        value2 = maxOf(value2 - 1, 0)
+                                    },
+                                    onValueClearClick = {
+                                        value2 = 0
+                                    }
+                                )
+                            }
+                        }
 
 
                         OutlinedButton(
@@ -218,7 +248,7 @@ fun ShoppingCardItem(
                                 color= Color.White
                             )
                             Text(
-                                text = "523,520,054",
+                                text = totalPrice.toString(),
                                 fontSize = 10.sp,
                                 color= Color.White
                             )
@@ -234,7 +264,11 @@ fun ShoppingCardItem(
                             Image(
                                 modifier = Modifier
                                     .padding(5.dp)
-                                    .size(30.dp, 30.dp),
+                                    .size(30.dp, 30.dp)
+                                    .clickable {
+                                         viewModel.deleteOrder(order.id)
+                                    }
+                                ,
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "product",
                             )
@@ -278,9 +312,32 @@ fun ShoppingCardItem(
 
 @Composable
 fun ShoppingCart(items: List<ShoppingItem>) {
+
+
     Column {
         items.forEach { item ->
-            ShoppingCardItem()
+            ShoppingCardItem(
+                OrderEntity(
+                    "11",
+                    convertFactor1 = 1,
+                    convertFactor2 = 12,
+                    fullNameKala1 = "biscuit (1)",
+                    fullNameKala2 = "biscuit (2)",
+                    productCode = 659985,
+                    productGroupCode = 54544,
+                    productName = "biscuit",
+                    unit1 = "shelf",
+                    unit2 = "Carton",
+                    unitid1 = "54654",
+                    unitid2 = "4565",
+                    salePrice = "98565",
+                    productImage = "",
+                     numberOrder=33,
+                     numberOrder1=44,
+                     numberOrder2=33,
+                     unitOrder="sh",
+                )
+            )
         }
 
         Button(

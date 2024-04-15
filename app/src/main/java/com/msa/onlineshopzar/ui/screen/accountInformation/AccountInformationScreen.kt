@@ -17,6 +17,8 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,14 +27,17 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.ui.component.RoundedIconTextField
 import com.msa.onlineshopzar.ui.screen.detailsProduct.TopBarDetails
 import com.msa.onlineshopzar.ui.screen.profile.ItemProfile
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
 
 @Composable
-fun AccountInformationScreen() {
-
+fun AccountInformationScreen(
+    viewModel: AccountViewModel = hiltViewModel()
+) {
+    val user by viewModel.user.collectAsState()
     Scaffold(
         modifier = Modifier
             .background(color = PlatinumSilver),
@@ -63,7 +68,7 @@ fun AccountInformationScreen() {
                     verticalArrangement = Arrangement.SpaceAround
                 ) {
                     RoundedIconTextField(
-                        value = "username",
+                        value = user?.customerName ?: "",
                         onValueChange = { },
                         label = "نام و نام خانوادگی",
                         icon = Icons.Outlined.Person,
@@ -71,7 +76,7 @@ fun AccountInformationScreen() {
                         typeEnabled = false
                     )
                     RoundedIconTextField(
-                        value = "username",
+                        value = user?.mobile ?: "",
                         onValueChange = { },
                         label = "شماره تماس",
                         icon = Icons.Outlined.Phone,
@@ -79,7 +84,7 @@ fun AccountInformationScreen() {
                         typeEnabled = false
                     )
                     RoundedIconTextField(
-                        value = "username",
+                        value = user?.brache ?: "",
                         onValueChange = { },
                         label = "شعبه پخش",
                         icon = Icons.Outlined.Business,
@@ -87,7 +92,7 @@ fun AccountInformationScreen() {
                         typeEnabled = false
                     )
                     RoundedIconTextField(
-                        value = "username",
+                        value = user?.city ?: "",
                         onValueChange = { },
                         label = "شهر",
                         icon = Icons.Outlined.LocationOn,

@@ -57,7 +57,10 @@ class LoginViewModel @Inject constructor(
         username:String,
         password:String
     ){
-
+        if (username.isBlank() || password.isBlank()) {
+            _state.update { it.copy(isLoading = false, error = "نام کاربری و رمز عبور الزامی است") }
+            return
+        }
         viewModelScope.launch {
             loginRepository.loginToken(
                 TokenRequest(username,password)
@@ -69,7 +72,7 @@ class LoginViewModel @Inject constructor(
                         val loginResponse = response.data
                         loginResponse?.let { data ->
                             if (!data.hasError){
-                                saveUserNameAndPassword(data.data)
+                                saveUserNameAndPassword(data.data,username,password)
                             }else
                                 _state.update { it.copy(isLoading = false, error = data.message) }
                         }
@@ -123,17 +126,32 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    private suspend fun saveUserNameAndPassword(token: String?) {
+    private suspend fun saveUserNameAndPassword(
+        token: String?,
+        username:String,
+        password:String
+    ) {
         viewModelScope.launch {
             // حذف توکن قبلی
             sharedPreferences.edit {
                 remove(CompanionValues.TOKEN)
             }
-// ذخیره کردن توکن جدید
+           // ذخیره کردن توکن جدید
             sharedPreferences.edit {
                 putString(CompanionValues.TOKEN, token)
+                putString(CompanionValues.USERNAME,username)
+                putString(CompanionValues.PASSWORD,password)
             }
             getUserData()
         }
+    }
+
+
+    fun getSavedUsername(): String {
+        return sharedPreferences.getString(CompanionValues.USERNAME, "") ?: ""
+    }
+
+    fun getSavedPassword(): String {
+        return sharedPreferences.getString(CompanionValues.PASSWORD, "") ?: ""
     }
 }

@@ -52,12 +52,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.msa.onlineshopzar.ui.theme.Typography
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -418,9 +420,8 @@ private fun DraggableThumbButton(
         Text(
             text = value,
             color = Color.White,
-            style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
-            fontSize = 12.sp
+            style = Typography.labelSmall
         )
     }
 }

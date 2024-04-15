@@ -23,11 +23,15 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.msa.onlineshopzar.ui.screen.login.LoginViewModel
 import com.msa.onlineshopzar.ui.theme.barcolor
+import javax.annotation.meta.When
 
 @Composable
 fun ItemProfile(
-    item : AccountItem
+    item : AccountItem,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         OutlinedButton(
@@ -36,7 +40,11 @@ fun ItemProfile(
                 .fillMaxWidth()
                 .padding(15.dp)
             ,
-            onClick = { },
+            onClick = {
+                 when(item.id){
+                     1->viewModel.navigateToAccount()
+                 }
+            },
             border = BorderStroke(1.dp, barcolor),
             shape = RoundedCornerShape(50), // = 50% percent
             // or shape = CircleShape
