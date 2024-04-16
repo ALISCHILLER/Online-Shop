@@ -22,8 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -54,93 +56,95 @@ fun LoginScreen(
     state.error?.let {
         ErrorDialog(it, {}, false)
     }
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
 
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.backgroundlogin),
+                contentDescription = "backgroundlogin",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
+            )
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.backgroundlogin),
-            contentDescription = "backgroundlogin",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds
-        )
-
-        state.error?.let {
+            state.error?.let {
                 ErrorDialog(
                     it,
-                    {viewModel.clearState()},
+                    { viewModel.clearState() },
                     false
                 )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            var username by remember { mutableStateOf(savedUsername) }
-            var password by remember { mutableStateOf(savedPassword) }
-
-            Card(
+            }
+            Column(
                 modifier = Modifier
-                    .width(328.dp)
+                    .fillMaxSize()
                     .padding(16.dp),
-                shape = RoundedCornerShape(10.dp)
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                var username by remember { mutableStateOf(savedUsername) }
+                var password by remember { mutableStateOf(savedPassword) }
+
+                Card(
+                    modifier = Modifier
+                        .width(328.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logozar),
-                        contentDescription = "logo",
-                        modifier = Modifier
-                            .size(110.dp, 82.dp)
-                            .layoutId("logo")
-                    )
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "وارد شوید!",
-                        )
-
-                    RoundedIconTextField(
-                        value = username,
-                        onValueChange = { username = it },
-                        label = "کد ملی",
-                        icon = Icons.Default.Person
-                    )
-
-                    RoundedIconTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = "رمز عبور",
-                        icon = Icons.Default.Lock,
-                        isPassword = true
-                    )
-
-                    Text(
-                        text = "رمز عبور خود را فراموش کرده اید؟",
-                        modifier = Modifier.padding(8.dp)
-                    )
-
-                    Button(
-                        onClick = {
-                                  viewModel.getToken(username,password)
-                            // اینجا می‌توانید عملیات ورود را انجام دهید
-                            // مثلا می‌توانید اطلاعات را به سرور ارسال کرده و ورود کاربر را بررسی کنید
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBackIosNew,
-                            contentDescription = "iconbutton"
+                        Image(
+                            painter = painterResource(id = R.drawable.logozar),
+                            contentDescription = "logo",
+                            modifier = Modifier
+                                .size(110.dp, 82.dp)
+                                .layoutId("logo")
                         )
-                        Text("بریم که خرید رو شروع کنیم")
+
+//                        Text(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            text = "وارد شوید!",
+//                        )
+
+                        RoundedIconTextField(
+                            value = username,
+                            onValueChange = { username = it },
+                            label = "کد ملی",
+                            icon = Icons.Default.Person
+                        )
+
+                        RoundedIconTextField(
+                            value = password,
+                            onValueChange = { password = it },
+                            label = "رمز عبور",
+                            icon = Icons.Default.Lock,
+                            isPassword = true
+                        )
+
+                        Text(
+                            text = "رمز عبور خود را فراموش کرده اید؟",
+                            modifier = Modifier.padding(8.dp)
+                        )
+
+                        Button(
+                            onClick = {
+                                viewModel.getToken(username, password)
+                                // اینجا می‌توانید عملیات ورود را انجام دهید
+                                // مثلا می‌توانید اطلاعات را به سرور ارسال کرده و ورود کاربر را بررسی کنید
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                        ) {
+                            Text("بریم که خرید رو شروع کنیم")
+                            Icon(
+                                imageVector = Icons.Default.ArrowBackIosNew,
+                                contentDescription = "iconbutton"
+                            )
+
+                        }
                     }
                 }
             }

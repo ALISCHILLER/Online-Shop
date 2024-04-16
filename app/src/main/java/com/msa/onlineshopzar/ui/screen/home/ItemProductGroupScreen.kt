@@ -1,17 +1,15 @@
 package com.msa.onlineshopzar.ui.screen.home
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessAlarm
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,14 +23,16 @@ import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
 
 
 import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.filled.AccessAlarm
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.foundation.layout.size
 
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.msa.onlineshopzar.R
 
 @Composable
 fun ItemProductGroupScreen(
@@ -45,6 +45,44 @@ fun ItemProductGroupScreen(
 
     val iconTint = if (isSelected) Color.White else Color.Red
     val textBackground = if (isSelected) Color.Red else Color.White
+    val icon = when(productGroupEntity.productGroupCode){
+        0 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.allred)
+            else painterResource(id = R.drawable.allwhite)
+        }
+        1 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.passtared)
+            else
+                painterResource(id = R.drawable.passwhite)
+        }
+        2 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.confred)
+            else
+                painterResource(id = R.drawable.confwhite)
+        }
+        3 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.cackred)
+            else
+                painterResource(id = R.drawable.cackwhite)
+        }
+        4 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.ardered)
+            else
+                painterResource(id = R.drawable.cackwhite)
+        }
+        5 -> {
+            if (!isSelected)
+                painterResource(id = R.drawable.oilred)
+            else
+                painterResource(id = R.drawable.oilwhite)
+        }
+        else -> {}
+    }
 
     Row(
         modifier = Modifier
@@ -68,7 +106,9 @@ fun ItemProductGroupScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                ProductGroupIcon(icon = Icons.Default.AccessAlarm, tint = iconTint)
+                ProductGroupIcon(
+                    icon = icon as Painter,
+                    tint = iconTint)
                 Text(
                     text = productGroupEntity.productGroup,
                     color = iconTint
@@ -80,11 +120,13 @@ fun ItemProductGroupScreen(
 
 
 @Composable
-fun ProductGroupIcon(icon: ImageVector, tint: Color) {
-    Icon(
-        imageVector = icon,
-        contentDescription = null,
-        tint = tint // تغییر رنگ آیکون به رنگ مورد نظر
+fun ProductGroupIcon(icon: Painter, tint: Color) {
+    Image(
+        modifier = Modifier
+            .size(50.dp,50.dp),
+        painter = icon,
+        contentDescription = "icon Group",
+       // تغییر رنگ آیکون به رنگ مورد نظر
     )
 }
 

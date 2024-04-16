@@ -13,3 +13,6 @@ val PlatinumSilver = Color(0xFFF8F8F8)
 
 val barcolor = Color(0xffbfbfc0)
 val lightcoral = Color(0xfff3b8bb)
+
+val LightPurple = Color(0xFFBCA1E7)
+val RoyalPurple = Color(0xEB700C24)

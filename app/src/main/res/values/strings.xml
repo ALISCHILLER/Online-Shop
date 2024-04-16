@@ -2,4 +2,7 @@
     <string name="app_name">Online Shop Zar</string>
     <string name="error_dialog_title">خطا</string>
     <string name="close_button_text">بستن</string>
+
+    <string name="Home">Home</string>
+    <string name="Bell">Bell</string>
 </resources>

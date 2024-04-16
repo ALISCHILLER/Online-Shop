@@ -23,14 +23,17 @@ class ShoppingViewModel @Inject constructor(
         MutableStateFlow<List<OrderEntity>>(emptyList())
     val allOrder: StateFlow<List<OrderEntity>> = _allOrder
 
+    init {
+        getAllOrder()
+    }
      fun getAllOrder() {
         viewModelScope.launch {
-            delay(1000)
             repository.getAllOrder.collect {
                 _allOrder.value = it
             }
         }
     }
+
 
     fun deleteOrder(orderId: String){
         viewModelScope.launch {

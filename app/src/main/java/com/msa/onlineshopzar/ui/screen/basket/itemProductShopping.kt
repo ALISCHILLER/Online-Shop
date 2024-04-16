@@ -1,23 +1,14 @@
 package com.msa.onlineshopzar.ui.screen.basket
 
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,53 +16,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.msa.onlineshopzar.ui.theme.OnlineShopZarTheme
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.toRect
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.data.local.entity.OrderEntity
 import com.msa.onlineshopzar.ui.component.CounterButton
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
-import com.msa.onlineshopzar.ui.theme.lightcoral
+import com.msa.onlineshopzar.ui.theme.Typography
 import com.msa.onlineshopzar.utils.Currency
-import kotlinx.coroutines.flow.MutableStateFlow
 
 //itemName: String,
 //itemDesc: String,
@@ -82,7 +58,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun ShoppingCardItem(
     order: OrderEntity,
-    viewModel: ShoppingViewModel = hiltViewModel()
+    viewModel: ShoppingViewModel = hiltViewModel(),
+    onDismiss: (Boolean) -> Unit
 ) {
 
     // تابع برای محاسبه قیمت به‌روز شده
@@ -101,12 +78,28 @@ fun ShoppingCardItem(
         ) {
 
 
-            var value1 by remember { mutableStateOf(0) }
-            var value2 by remember { mutableStateOf(0) }
+            var value1 by remember { mutableStateOf(order?.numberOrder1 ?: 0) }
+            var value2 by remember { mutableStateOf(order?.numberOrder2 ?: 0) }
 
+            var chack by remember { mutableStateOf(false) }
             val totalPrice by remember(value1, value2, order) {
                 mutableStateOf(viewModel.calculateTotalPrice(value1, value2, order))
             }
+            if (totalPrice<1){
+                onDismiss(true)
+            }
+            if (chack)
+            AlertDialogExample(
+                onConfirmation = {
+                    viewModel.deleteOrder(order.id)
+                    viewModel.getAllOrder()
+                    onDismiss(true)
+                    chack = false
+                },
+                onDismissRequest = {chack = false}
+            )
+
+
 
             Box(
                 Modifier
@@ -136,10 +129,12 @@ fun ShoppingCardItem(
                                 )
                                 .aspectRatio(1f)
                         ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.product),
-                                contentDescription = "product",
-                                modifier = Modifier.fillMaxSize()
+
+                            AsyncImage(
+                                model = order.productImage,
+                                contentDescription = "productImage",
+                                modifier = Modifier.fillMaxSize(),
+                                error = painterResource(id = R.drawable.nourl)
                             )
                         }
 
@@ -151,7 +146,7 @@ fun ShoppingCardItem(
                             text = "قیمت هر عدد:"
                         )
 
-                        order.salePrice?.let {
+                        order.salePrice.let {
                             Text(
                                 modifier = Modifier
                                     .padding(5.dp)
@@ -164,11 +159,16 @@ fun ShoppingCardItem(
 
                     Column(
                         modifier = Modifier
-                            .padding(5.dp)
+                            .padding(6.dp)
                             .aspectRatio(1.1f),
                         verticalArrangement = Arrangement.SpaceAround
                     ){
-                        order.productName?.let { Text(text = it) }
+                        order.productName?.let {
+                            Text(
+                                text = it,
+                                maxLines = 1
+                            )
+                        }
 
                             Row(
                                 modifier = Modifier
@@ -186,7 +186,7 @@ fun ShoppingCardItem(
                                 }
                                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                     CounterButton(
-                                        value = order.numberOrder1.toString(),
+                                        value = value1.toString(),
                                         onValueIncreaseClick = {
                                             value1 += 1
                                         },
@@ -220,7 +220,7 @@ fun ShoppingCardItem(
                             }
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 CounterButton(
-                                    value = order.numberOrder2.toString(),
+                                    value = value2.toString(),
                                     onValueIncreaseClick = {
                                         value2 += 1
                                     },
@@ -234,24 +234,23 @@ fun ShoppingCardItem(
                             }
                         }
 
-
-                        OutlinedButton(
-                            onClick = { },
-                            border = BorderStroke(1.dp, Color.Red),
-                            shape = RoundedCornerShape(50), // = 50% percent
-                            // or shape = CircleShape
-                            colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Red)
+                        Button(
+                            onClick = {
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                         ) {
                             Text(
                                 text = "مبلغ ناخالص:",
-                                fontSize = 10.sp,
-                                color= Color.White
+                                color= Color.White,
+                                style = Typography.labelSmall,
                             )
                             Text(
-                                text = totalPrice.toString(),
-                                fontSize = 10.sp,
+                                text =  Currency(totalPrice).toFormattedString(),
+                                style = Typography.labelSmall,
                                 color= Color.White
                             )
+
                         }
 
                     }
@@ -266,7 +265,8 @@ fun ShoppingCardItem(
                                     .padding(5.dp)
                                     .size(30.dp, 30.dp)
                                     .clickable {
-                                         viewModel.deleteOrder(order.id)
+                                        chack =true
+
                                     }
                                 ,
                                 imageVector = Icons.Default.Delete,
@@ -336,7 +336,8 @@ fun ShoppingCart(items: List<ShoppingItem>) {
                      numberOrder1=44,
                      numberOrder2=33,
                      unitOrder="sh",
-                )
+                ),
+                onDismiss = {}
             )
         }
 
@@ -349,6 +350,45 @@ fun ShoppingCart(items: List<ShoppingItem>) {
             Text(text = "قرار دادن سفارش")
         }
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AlertDialogExample(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+) {
+    AlertDialog(
+        title = {
+            Text(text = " آیا از حذف کردن کالا مطمئن هستید؟")
+        },
+        text = {
+            Text(text = "")
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("بله")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("خیر")
+            }
+        },
+        shape = RoundedCornerShape(8.dp)
+    )
 }
 
 @Preview(showBackground = true)

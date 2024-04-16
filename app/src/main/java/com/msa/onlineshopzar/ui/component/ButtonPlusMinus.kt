@@ -76,12 +76,12 @@ private const val CONTAINER_OFFSET_FACTOR = 0.1f
 private const val DRAG_LIMIT_HORIZONTAL_DP = 72
 private const val DRAG_LIMIT_VERTICAL_DP = 64
 private const val START_DRAG_THRESHOLD_DP = 2
-private const val DRAG_LIMIT_HORIZONTAL_THRESHOLD_FACTOR = 0.9f
+private const val DRAG_LIMIT_HORIZONTAL_THRESHOLD_FACTOR = 0.6f
 private const val DRAG_LIMIT_VERTICAL_THRESHOLD_FACTOR = 0.9f
 private const val DRAG_HORIZONTAL_ICON_HIGHLIGHT_LIMIT_DP = 36
 private const val DRAG_VERTICAL_ICON_HIGHLIGHT_LIMIT_DP = 60
 private const val DRAG_CLEAR_ICON_REVEAL_DP = 2
-private const val COUNTER_DELAY_INITIAL_MS = 500L
+private const val COUNTER_DELAY_INITIAL_MS = 100L
 private const val COUNTER_DELAY_FAST_MS = 100L
 
 @Composable

@@ -30,7 +30,7 @@ val Typography = Typography(
     labelSmall = TextStyle(
         fontFamily =  FontFamily(iranianSansFont),
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
+        fontSize = 14.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )

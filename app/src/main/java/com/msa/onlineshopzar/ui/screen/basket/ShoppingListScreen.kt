@@ -27,6 +27,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,11 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.msa.onlineshopzar.data.local.entity.OrderEntity
 import com.msa.onlineshopzar.ui.component.RadioGroup
 import com.msa.onlineshopzar.ui.navigation.navgraph.Route
 import com.msa.onlineshopzar.ui.screen.detailsProduct.TopBarDetails
 import com.msa.onlineshopzar.ui.screen.home.HomeViewModel
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
+import kotlinx.coroutines.delay
 
 @Composable
 fun ShoppingListScreen(
@@ -57,16 +60,21 @@ fun ShoppingListScreen(
         topBar = {
             TopBarDetails("لیست خرید های شما")
         },
-        bottomBar = {
-
-        }
     ) {
 
-        LaunchedEffect(Unit){
-            viewModel.getAllOrder()
+        val orders = rememberSaveable { mutableStateOf<List<OrderEntity>>(emptyList()) }
+        val counter = remember { mutableStateOf(0) }
+        LaunchedEffect(counter.value){
+
+            orders.value = viewModel.allOrder.value
         }
 
-        val allTasks by viewModel.allOrder.collectAsState()
+        LaunchedEffect(Unit){
+            delay(1000)
+            orders.value = viewModel.allOrder.value
+        }
+
+
         var selectedOption by remember { mutableStateOf("عرفی") }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
@@ -84,15 +92,20 @@ fun ShoppingListScreen(
                         .fillMaxWidth()
                         .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
-                    items(allTasks) {
-                        ShoppingCardItem(it)
+                    items(orders.value) {
+                        ShoppingCardItem(
+                            it,
+                            onDismiss = {
+                                counter.value++
+                            }
+                        )
                     }
                 }
 
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(5.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White
                     ),
@@ -120,7 +133,7 @@ fun ShoppingListScreen(
                         navController.navigate(Route.InvoicePreviewScreen.route)
                     },
                     modifier = Modifier
-                        .padding(15.dp)
+                        .padding(10.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {

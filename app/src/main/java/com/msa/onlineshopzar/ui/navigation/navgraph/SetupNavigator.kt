@@ -37,6 +37,7 @@ import com.msa.onlineshopzar.ui.screen.resetPassword.NationalCodeResetPassScreen
 import com.msa.onlineshopzar.ui.screen.resetPassword.OtpScreen
 import com.msa.onlineshopzar.ui.screen.splash.SplashScreen
 import com.msa.onlineshopzar.ui.theme.OnlineShopZarTheme
+import timber.log.Timber
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -80,10 +81,22 @@ fun MainActivity.SetupNavigator() {
                         route =it
                     )
                 })
+//                navController.currentBackStackEntryAsState().value?.destination?.route?.let {
+//                    BottomBarb(
+//                        currentRoute= it,
+//                        navigateToRoute={
+//                            navigateToTab(
+//                                navController = navController,
+//                                route =it
+//                            )
+//                        }
+//                    )
+//                }
             }
 
         }
     ) {
+        Timber.tag("SetupNavigator").e("SetupNavigator SetupNavigator: ")
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,

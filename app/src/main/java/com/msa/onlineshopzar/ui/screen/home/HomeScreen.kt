@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
 import com.msa.onlineshopzar.ui.component.DialogLoadingWait
 import com.msa.onlineshopzar.ui.theme.*
+import timber.log.Timber
 
 @ExperimentalMaterial3Api
 @Composable
@@ -44,6 +45,7 @@ fun HomeScreen(
         viewModel.productCheck()
     }
 
+    viewModel.ProductRequest()
 
     val allTasks by viewModel.allTasks.collectAsState()
     val allOrder by viewModel.allOrder.collectAsState()
@@ -51,15 +53,12 @@ fun HomeScreen(
     val allProductGroup by viewModel.allProductGroup.collectAsState()
     val homeState by viewModel.state.collectAsState()
 
-    val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
+    val currentSample = rememberSaveable { mutableStateOf(homeState.isLoading) }
     val onReset = { currentSample.value = homeState.isLoading }
-
-    if (homeState.isLoading) {
-        DialogLoadingWait(onReset)
-    }
-
-
-
+    Timber.tag("HomeScreen").e("HomeScreen HomeScreen: ")
+//    if (currentSample.value) {
+//        DialogLoadingWait(onReset)
+//    }
 
 
 
@@ -99,10 +98,14 @@ fun HomeScreen(
                         .fillMaxWidth()
                         .weight(1.0f),
                 ) {
-                    items(allTasks) {
+                    items(
+                        items = allTasks,
+                        key = { it.id }
+                    ) {product ->
+                        val orderItem = allOrder.firstOrNull { it.id == product.id }
                         ListItemProductScreen(
-                            it,
-                            orderEntity =  allOrder
+                            product,
+                            orderEntity =  orderItem
                         )
                     }
                 }

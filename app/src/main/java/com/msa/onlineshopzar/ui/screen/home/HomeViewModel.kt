@@ -1,5 +1,6 @@
 package com.msa.onlineshopzar.ui.screen.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msa.onlineshopzar.data.local.entity.ProductGroupEntity
@@ -26,6 +27,8 @@ class HomeViewModel @Inject constructor(
     private val navManager: NavManager,
     private val homeRepository: HomeRepository
 ) : ViewModel() {
+
+
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
@@ -56,7 +59,7 @@ class HomeViewModel @Inject constructor(
             ProductGroupRequest()
         }else{
             getAllAllOrder()
-            getAllProduct()
+            getAllProductGroup()
         }
     }
     fun ProductRequest() {
@@ -77,6 +80,7 @@ class HomeViewModel @Inject constructor(
                     }
 
                     Resource.Status.LOADING -> {
+                        Timber.tag("HomeViewModel").e("ProductRequest LOADING: ")
                         updateStateLoading()
                     }
 
@@ -117,6 +121,7 @@ class HomeViewModel @Inject constructor(
                         responseData?.let { data ->
                             if (!data.hasError) {
                                 homeRepository.insertProductGroup(data.data)
+                                delay(1000)
                                 getAllProductGroup()
                             } else
                                 updateStateError(data.message)
@@ -124,6 +129,7 @@ class HomeViewModel @Inject constructor(
                     }
 
                     Resource.Status.LOADING -> {
+                        Timber.tag("HomeViewModel").e("ProductRequest LOADING: ")
                         updateStateLoading()
                     }
 
@@ -164,8 +170,8 @@ class HomeViewModel @Inject constructor(
     }
     private fun getAllProductGroup() {
         viewModelScope.launch {
-            delay(1000)
             homeRepository.getAllProductGroup.collect {
+                Log.e("TAG", "getAllProductGroup: $it", )
                 updateStateLoading(false)
                 _allProductGroup.value = it
             }

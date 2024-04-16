@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -53,9 +54,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.msa.onlineshopzar.R
 import com.msa.onlineshopzar.data.local.entity.UserModelEntity
 import com.msa.onlineshopzar.ui.component.ButtonAlarm
 import com.msa.onlineshopzar.ui.theme.PlatinumSilver
+import com.msa.onlineshopzar.ui.theme.Typography
 
 @ExperimentalMaterial3Api
 @Composable
@@ -80,21 +83,22 @@ fun HomeTopBar(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        imageVector = Icons.Default.Person,
+                        painter = painterResource(id = R.drawable.iprofile),
                         contentDescription = "User Profile Image",
                         modifier = Modifier
-                            .size(30.dp)
-                            .clip(CircleShape)
-                            .border(width = 1.dp, color = Color.Gray, shape = CircleShape)
+                            .size(65.dp)
+                            .clip(CircleShape),
+//                            .border(width = 1.dp, color = Color.Gray, shape = CircleShape)
                     )
 
                     Column {
                         Text(
-                            text = userModelEntity.customerName
+                            text = userModelEntity.customerName,
+                            style = Typography.labelSmall
                         )
                         Text(
                             text = "(کد مشتری:${userModelEntity.customerCode})",
-                            fontSize = 9.sp
+                            style = Typography.labelSmall
                         )
                     }
 
@@ -165,6 +169,7 @@ fun HomeTopBar(
 
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 private fun HomeTopBarPreview() {
