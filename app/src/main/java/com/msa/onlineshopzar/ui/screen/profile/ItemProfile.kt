@@ -16,6 +16,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.onlineshopzar.ui.screen.login.LoginViewModel
 import com.msa.onlineshopzar.ui.theme.barcolor
 import javax.annotation.meta.When
+import com.msa.onlineshopzar.ui.component.AlertDialogConfirm as AlertDialogConfirm1
 
 @Composable
 fun ItemProfile(
@@ -34,6 +39,17 @@ fun ItemProfile(
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        var chack by remember { mutableStateOf(false) }
+        if (chack)
+        AlertDialogConfirm1(
+            onConfirmation = {
+                viewModel.navigateToLogin()
+                chack=false
+            },
+            onDismissRequest = {chack=false},
+            message = "آیا می‌خواهید از برنامه خارج شوید؟"
+        )
+
         OutlinedButton(
             modifier = Modifier
                 .padding(8.dp)
@@ -42,7 +58,10 @@ fun ItemProfile(
             ,
             onClick = {
                  when(item.id){
-                     1->viewModel.navigateToAccount()
+                     1-> {
+                         viewModel.navigateToAccount()
+                     }
+                     4->chack=true
                  }
             },
             border = BorderStroke(1.dp, barcolor),

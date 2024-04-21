@@ -100,7 +100,7 @@ fun MainActivity.SetupNavigator() {
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,
-            startDestination = Route.LoginScreen.route,
+            startDestination = Route.SplashScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
             composable(route = Route.SplashScreen.route) { SplashScreen() }

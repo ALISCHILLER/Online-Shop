@@ -71,7 +71,7 @@ fun ShoppingCardItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .size(100.dp, 200.dp),
+                .size(100.dp, 220.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
             )
@@ -240,17 +240,23 @@ fun ShoppingCardItem(
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                         ) {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceAround
+                            ){
+
                             Text(
                                 text = "مبلغ ناخالص:",
                                 color= Color.White,
-                                style = Typography.labelSmall,
+                                style = Typography.bodyLarge,
                             )
                             Text(
                                 text =  Currency(totalPrice).toFormattedString(),
-                                style = Typography.labelSmall,
+                                style = Typography.bodyLarge,
                                 color= Color.White
                             )
-
+                            }
                         }
 
                     }
@@ -265,7 +271,7 @@ fun ShoppingCardItem(
                                     .padding(5.dp)
                                     .size(30.dp, 30.dp)
                                     .clickable {
-                                        chack =true
+                                        chack = true
 
                                     }
                                 ,
