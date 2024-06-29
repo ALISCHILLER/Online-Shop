@@ -33,7 +33,8 @@ public class AccountManager implements IAccountManager {
                              final OnTokenAcquired onTokenAcquired, final OnError onError) {
 
         getToken(account.username, account.password,"password",
-                scope,account.deviceId,
+                scope,
+                account.deviceId,
                 account.token,
                 "1e67dfff-e23d-461f-83ea-ba0974a46c1d",
                 "")
